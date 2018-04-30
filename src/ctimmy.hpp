@@ -192,6 +192,7 @@ int TTimmy::Add(TStrArray MKeywords, TStrArray Replies)
 
     MKeywordsList.push_back(MKeywords);
     ReplyList.push_back(Replies);
+    ++NOfEntries;
     return 200;
 }
 
