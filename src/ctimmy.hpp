@@ -51,30 +51,35 @@ class TTimmy;
 
 class TTimmy
 {
-    bool Initialized = false;
+
+  public:
     bool Enabled = false;
-    int NOfEntries;
-    std::vector<TStrArray> MKeywordsList;
-    std::vector<TStrArray> ReplyList;
     bool DupesCheck;
     int TPercent;
     std::string NoUdstdRep;
 
-  public:
     int Init();
     int Add(TStrArray MKeywords, TStrArray Replies);
     // int Add(std::string KeywordsStr, std::string RepStr);
     int Add(std::string KeywordsStr, std::string RepStr, char KStrDeli, char MStrDeli);
     int Remove(TStrArray MKeywords);
     int Remove(int AIndex);
-    void Update();
     std::string Answer(std::string TMessage);
+
+
+  private:
+    bool Initialized = false;
+    int NOfEntries;
+    std::vector<TStrArray> MKeywordsList;
+    std::vector<TStrArray> ReplyList;
+
+    void Update();
 };
 
 std::string StrTrim(std::string s);
 TStrArray StrSplit(std::string s, char delimiter);
 bool CompareStrArrays(TStrArray ArrayA, TStrArray ArrayB);
-std::string lowercase(std::string s);
+// std::string lowercase(std::string s);
 
 /*
     Given a string, process it so that the first and the last
@@ -289,7 +294,8 @@ std::string TTimmy::Answer(std::string TMessage)
     std::default_random_engine generator;
 
     // Pre-process the message
-    std::string FlagM = lowercase(StrTrim(TMessage));
+    std::string FlagM = StrTrim(TMessage);
+    std::transform(FlagM.begin(), FlagM.end(), FlagM.begin(), ::tolower);
     // Delete punctuation at the end of the message (like "?" or "!")
     while (!isalnum(FlagM.back()))
         FlagM.erase(prev(FlagM.end()));
@@ -313,8 +319,8 @@ std::string TTimmy::Answer(std::string TMessage)
 }
 
 // For compatibility
-std::string lowercase(std::string s)
-{
-    std::transform(s.begin(), s.end(), s.begin(), ::tolower);
-    return s;
-}
+// std::string lowercase(std::string s)
+// {
+//     std::transform(s.begin(), s.end(), s.begin(), ::tolower);
+//     return s;
+// }
