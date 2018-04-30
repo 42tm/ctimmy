@@ -147,7 +147,7 @@ bool CompareStrArrays(TStrArray ArrayA, TStrArray ArrayB)
 {
     if (ArrayA.size() != ArrayB.size())
         return false;
-    for (int iter = 0; iter < ArrayA.size(); ++iter)
+    for (size_t iter = 0; iter < ArrayA.size(); ++iter)
         if (ArrayA[iter] != ArrayB[iter])
             return false;
     return true;
@@ -166,7 +166,7 @@ int TTimmy::Init()
     NoUdstdRep = "Sorry, I didn't get that";
     TPercent = 70;
     NOfEntries = 0;
-    Update;
+    Update();
     Enabled = true;
     Initialized = true;
     return 100;
@@ -191,7 +191,7 @@ int TTimmy::Add(TStrArray MKeywords, TStrArray Replies)
                 return 202;
 
     ++NOfEntries;
-    Update;
+    Update();
     MKeywordsList.back() = MKeywords;
     ReplyList.back() = Replies;
     return 200;
@@ -264,7 +264,7 @@ int TTimmy::Remove(int AIndex)
     ReplyList.erase(std::next(ReplyList.begin(), AIndex));
 
     --NOfEntries;
-    Update;
+    Update();
     return 300;
 }
 
@@ -290,7 +290,6 @@ std::string TTimmy::Answer(std::string TMessage)
         return ("");
 
     // Define random engine
-    std::default_random_engine generator;
 
     // Pre-process the message
     std::string FlagM = StrTrim(TMessage);
@@ -307,9 +306,10 @@ std::string TTimmy::Answer(std::string TMessage)
         for (auto MKIter : MKeywordsList[MetaIter])
             for (auto MWIter : FlagWords)
                 counter += (MWIter == MKIter);
-        if ((counter / MKeywordsList[MetaIter].size()) * 100 >= TPercent)
+        if ((counter / ((int)MKeywordsList[MetaIter].size())) * 100 >= TPercent)
         {
-            std::uniform_real_distribution<int> distribution(0, ReplyList[MetaIter].size());
+            std::default_random_engine generator;
+            std::uniform_int_distribution<int> distribution(0, ReplyList[MetaIter].size());
             // int GetAnswer = distribution(generator);
             return (ReplyList[MetaIter][distribution(generator)]);
         }
