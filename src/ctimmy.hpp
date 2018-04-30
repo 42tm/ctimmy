@@ -73,7 +73,8 @@ class TTimmy
     std::vector<TStrArray> MKeywordsList;
     std::vector<TStrArray> ReplyList;
 
-    void Update();
+    // Deprecated
+    // void Update();
 };
 
 std::string StrTrim(std::string s);
@@ -166,7 +167,6 @@ int TTimmy::Init()
     NoUdstdRep = "Sorry, I didn't get that";
     TPercent = 70;
     NOfEntries = 0;
-    Update();
     Enabled = true;
     Initialized = true;
     return 100;
@@ -190,10 +190,8 @@ int TTimmy::Add(TStrArray MKeywords, TStrArray Replies)
             if (CompareStrArrays(iter, MKeywords))
                 return 202;
 
-    ++NOfEntries;
-    Update();
-    MKeywordsList.back() = MKeywords;
-    ReplyList.back() = Replies;
+    MKeywordsList.push_back(MKeywords);
+    ReplyList.push_back(Replies);
     return 200;
 }
 
@@ -264,21 +262,7 @@ int TTimmy::Remove(int AIndex)
     ReplyList.erase(std::next(ReplyList.begin(), AIndex));
 
     --NOfEntries;
-    Update();
     return 300;
-}
-
-/*
-    Update metadata to match up with number of entries
-*/
-void TTimmy::Update()
-{
-    if (!Initialized)
-        return;
-
-    // Note: Not necessary in C++. Consider removing this or leaving this for compatibility
-    // MKeywordsList.resize(NOfEntries);
-    // MKeywordsList.resize(NOfEntries);
 }
 
 /*
