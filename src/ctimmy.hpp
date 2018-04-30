@@ -38,7 +38,6 @@ typedef std::vector<std::string> tStrArray;
 
     Variables (see also the README file):
 
-      initialized        : State of initialization
       enabled            : Acts like initialized but used in fewer number of functions
       nOfEntries         : Number of entries (elements) in mKeywordsList or replyList
       dupesCheck         : Check for duplicate or not (might be time-saving if we don't check for duplicate)
@@ -55,11 +54,11 @@ class tTimmy
 
   public:
     bool enabled = false;
-    bool dupesCheck;
-    int tPercent;
+    bool dupesCheck = true;
+    int tPercent = 0;
     std::string noUdstdRep;
 
-    int init();
+    tTimmy();
     int add(tStrArray mKeywords, tStrArray replies);
     // int add(std::string keywordsStr, std::string repStr);
     int add(std::string keywordsStr, std::string repStr, char kStrDeli, char mStrDeli);
@@ -68,8 +67,7 @@ class tTimmy
     std::string answer(std::string tMessage);
 
   private:
-    bool initialized = false;
-    int nOfEntries;
+    int nOfEntries = 0;
     std::vector<tStrArray> mKeywordsList;
     std::vector<tStrArray> replyList;
 
@@ -153,33 +151,28 @@ bool compareStrArrays(tStrArray arrayA, tStrArray arrayB)
 }
 
 /*
-    initialize object with some default values set.
-    Return 101 if object is initialized, 100 otherwise.
+    construct class with some default values set.
 */
-int tTimmy::init()
+tTimmy::tTimmy()
 {
-    if (initialized)
-        return 101;
-
     dupesCheck = true;
     noUdstdRep = "Sorry, I didn't get that";
     tPercent = 70;
     nOfEntries = 0;
     enabled = true;
-    initialized = true;
     return 100;
 }
 
 /*
     add data to bot object's metadata base.
     Data include message's keywords and possible replies to the message.
-    Return: 102 if object is not initialized or enabled
+    Return: 102 if object is not enabled
             202 if dupesCheck = True and found a match to mKeywords in mKeywordsList
             200 if the adding operation succeed
 */
 int tTimmy::add(tStrArray mKeywords, tStrArray replies)
 {
-    if (!initialized || !enabled)
+    if (!enabled)
         return 102;
     for (std::string &iter : mKeywords)
         std::transform(iter.begin(), iter.end(), iter.begin(), ::tolower);
@@ -221,12 +214,12 @@ int tTimmy::add(std::string keywordsStr, std::string repStr, char kStrDeli = ' '
     This function simply saves offsets of the matching arrays in mKeywordsList
     and then call tTimmy.removeByIndex().
 
-    Return: 102 if object is not initialized or not enabled
+    Return: 102 if object is not enabled
             308 if the operation succeed
 */
 int tTimmy::remove(tStrArray mKeywords)
 {
-    if (!initialized || !enabled)
+    if (!enabled)
         return 102;
 
     for (std::string iter : mKeywords)
@@ -251,7 +244,7 @@ int tTimmy::remove(tStrArray mKeywords)
 
 int tTimmy::remove(int aIndex)
 {
-    if (!initialized || !enabled)
+    if (!enabled)
         return 102;
     if ((aIndex < 0) || (aIndex >= nOfEntries))
         return 305;
@@ -268,7 +261,7 @@ int tTimmy::remove(int aIndex)
 */
 std::string tTimmy::answer(std::string tMessage)
 {
-    if (!initialized || !enabled)
+    if (!enabled)
         return ("");
 
     // Define random engine
