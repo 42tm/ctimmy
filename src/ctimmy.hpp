@@ -79,7 +79,6 @@ class TTimmy
 std::string StrTrim(std::string s);
 TStrArray StrSplit(std::string s, char delimiter);
 bool CompareStrArrays(TStrArray ArrayA, TStrArray ArrayB);
-// std::string lowercase(std::string s);
 
 /*
     Given a string, process it so that the first and the last
@@ -317,10 +316,3 @@ std::string TTimmy::Answer(std::string TMessage)
     }
     return (NoUdstdRep);
 }
-
-// For compatibility
-// std::string lowercase(std::string s)
-// {
-//     std::transform(s.begin(), s.end(), s.begin(), ::tolower);
-//     return s;
-// }
