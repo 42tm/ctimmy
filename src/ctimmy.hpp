@@ -20,16 +20,17 @@
 #include <string>
 #include <algorithm>
 #include <random>
+#include <chrono>
 
 // Interface
-typedef std::vector<std::string> TStrArray;
+typedef std::vector<std::string> tStrArray;
 
 /*
     Metadata refers to two arrays holding data:
-    MKeywordsList which holds keywords, and
-    ReplyList which holds replies
+    mKeywordsList which holds keywords, and
+    replyList which holds replies
 
-      MKeywordsList [                                 ReplyList [
+      mKeywordsList [                                 replyList [
                      [*keywords for message 1*],                [*possible answers for message 1*],
                      [*keywords for message 2*],                [*possible answers for message 2*],
                                  ...                                             ...
@@ -37,97 +38,96 @@ typedef std::vector<std::string> TStrArray;
 
     Variables (see also the README file):
 
-      Initialized        : State of initialization
-      Enabled            : Acts like Initialized but used in fewer number of functions
-      NOfEntries         : Number of entries (elements) in MKeywordsList or ReplyList
-      DupesCheck         : Check for duplicate or not (might be time-saving if we don't check for duplicate)
-      TPercent           : Minimum percentage of the number of keywords over all the words of the message
+      enabled            : Acts like initialized but used in fewer number of functions
+      nOfEntries         : Number of entries (elements) in mKeywordsList or replyList
+      dupesCheck         : Check for duplicate or not (might be time-saving if we don't check for duplicate)
+      tPercent           : Minimum percentage of the number of keywords over all the words of the message
                            so that the bot object can "understand" and have a reply.
                            (Sorry I don't have a good way to explain it)
-      NoUdstdRep : String to assign to TTimmy.Answer in case there's no possible answer to the given message
+      noUdstdRep : String to assign to timmy.answer in case there's no possible answer to the given message
 */
 
-class TTimmy;
+class timmy;
 
-class TTimmy
+class timmy
 {
-    bool Initialized = false;
-    bool Enabled = false;
-    int NOfEntries;
-    std::vector<TStrArray> MKeywordsList;
-    std::vector<TStrArray> ReplyList;
-    bool DupesCheck;
-    int TPercent;
-    std::string NoUdstdRep;
-
   public:
-    int Init();
-    int Add(TStrArray MKeywords, TStrArray Replies);
-    // int Add(std::string KeywordsStr, std::string RepStr);
-    int Add(std::string KeywordsStr, std::string RepStr, char KStrDeli, char MStrDeli);
-    int Remove(TStrArray MKeywords);
-    int Remove(int AIndex);
-    void Update();
-    std::string Answer(std::string TMessage);
+    bool enabled = false;
+    bool dupesCheck = true;
+    int tPercent = 0;
+    std::string noUdstdRep;
+
+    timmy();
+    int add(tStrArray mKeywords, tStrArray replies);
+    // int add(std::string keywordsStr, std::string repStr);
+    int add(std::string keywordsStr, std::string repStr, char kStrDeli, char mStrDeli);
+    int remove(tStrArray mKeywords);
+    int remove(int aIndex);
+    std::string answer(std::string tMessage);
+
+  private:
+    int nOfEntries = 0;
+    std::vector<tStrArray> mKeywordsList;
+    std::vector<tStrArray> replyList;
+
+    // Deprecated
+    // void Update();
 };
 
-std::string StrTrim(std::string s);
-TStrArray StrSplit(std::string s, char delimiter);
-bool CompareStrArrays(TStrArray ArrayA, TStrArray ArrayB);
-std::string lowercase(std::string s);
+std::string strTrim(std::string s);
+tStrArray strSplit(std::string s, char delimiter);
+bool compareStrArrays(tStrArray arrayA, tStrArray arrayB);
 
 /*
     Given a string, process it so that the first and the last
     character are not space, and there is no multiple spaces
     character in a row.
 */
-std::string StrTrim(std::string s)
+std::string strTrim(std::string s)
 {
-    bool SpaceOn;
+    bool spaceOn;
     while (s.front() == ' ')
         s.erase(s.begin());
     while (s.back() == ' ')
-        s.erase(std::prev(s.end(), 1));
-    std::string FlagStr;
+        s.erase(std::prev(s.end()));
+    std::string flagStr;
     for (char iter : s)
         if (iter != ' ')
         {
-            FlagStr += iter;
-            SpaceOn = false;
+            flagStr += iter;
+            spaceOn = false;
         }
         else
-            switch (SpaceOn)
+            switch (spaceOn)
             {
             case true:
                 continue;
             case false:
-                FlagStr += ' ';
-                SpaceOn = true;
+                flagStr += ' ';
+                spaceOn = true;
             }
-    return (FlagStr);
+    return (flagStr);
 }
 /*
     Given a string, split the string using the delimiter
     and return an array containing the seperated strings.
 */
-TStrArray StrSplit(std::string s, char delimiter)
+tStrArray strSplit(std::string s, char delimiter)
 {
-    TStrArray splited;
+    tStrArray splited;
     s += delimiter;
-    std::string FlagStr;
-    int counter = -1;
+    std::string flagStr;
     for (char iter : s)
         if (iter != delimiter)
-            FlagStr += iter;
+            flagStr += iter;
         else
         {
-            if (FlagStr.empty())
+            if (flagStr.empty())
                 continue;
-            splited.resize((++counter) + 1);
-            splited[counter] = FlagStr;
-            FlagStr.clear();
+            splited.push_back(flagStr);
+            flagStr.clear();
         }
-    if (counter == -1)
+    if (splited.empty())
     {
         splited.resize(1);
         splited[0] = s;
@@ -139,182 +139,155 @@ TStrArray StrSplit(std::string s, char delimiter)
     Given two arrays of strings, compare them.
     Return true if they are the same, false otherwise.
 */
-bool CompareStrArrays(TStrArray ArrayA, TStrArray ArrayB)
+bool compareStrArrays(tStrArray arrayA, tStrArray arrayB)
 {
-    if (ArrayA.size() != ArrayB.size())
+    if (arrayA.size() != arrayB.size())
         return false;
-    for (int iter = 0; iter < ArrayA.size(); ++iter)
-        if (ArrayA[iter] != ArrayB[iter])
+    for (size_t iter = 0; iter < arrayA.size(); ++iter)
+        if (arrayA[iter] != arrayB[iter])
             return false;
     return true;
 }
 
 /*
-    Initialize object with some default values set.
-    Return 101 if object is initialized, 100 otherwise.
+    construct class with some default values set.
 */
-int TTimmy::Init()
+timmy::timmy()
 {
-    if (Initialized)
-        return 101;
-
-    DupesCheck = true;
-    NoUdstdRep = "Sorry, I didn't get that";
-    TPercent = 70;
-    NOfEntries = 0;
-    Update;
-    Enabled = true;
-    Initialized = true;
-    return 100;
+    dupesCheck = true;
+    noUdstdRep = "Sorry, I didn't get that";
+    tPercent = 70;
+    nOfEntries = 0;
+    enabled = true;
 }
 
 /*
-    Add data to bot object's metadata base.
+    add data to bot object's metadata base.
     Data include message's keywords and possible replies to the message.
-    Return: 102 if object is not initialized or enabled
-            202 if DupesCheck = True and found a match to MKeywords in MKeywordsList
+    Return: 102 if object is not enabled
+            202 if dupesCheck = True and found a match to mKeywords in mKeywordsList
             200 if the adding operation succeed
 */
-int TTimmy::Add(TStrArray MKeywords, TStrArray Replies)
+int timmy::add(tStrArray mKeywords, tStrArray replies)
 {
-    if (!Initialized || !Enabled)
+    if (!enabled)
         return 102;
-    for (std::string iter : MKeywords)
+    for (std::string &iter : mKeywords)
         std::transform(iter.begin(), iter.end(), iter.begin(), ::tolower);
-    if (DupesCheck && (NOfEntries > 0))
-        for (TStrArray iter : MKeywordsList)
-            if (CompareStrArrays(iter, MKeywords))
+    if (dupesCheck && (nOfEntries > 0))
+        for (tStrArray iter : mKeywordsList)
+            if (compareStrArrays(iter, mKeywords))
                 return 202;
 
-    ++NOfEntries;
-    Update;
-    MKeywordsList.back() = MKeywords;
-    ReplyList.back() = Replies;
+    mKeywordsList.push_back(mKeywords);
+    replyList.push_back(replies);
+    ++nOfEntries;
     return 200;
 }
 
 /*
-    Add data to bot but this one gets string inputs instead of TStrArray inputs.
-    This use StrSplit() to split the string inputs (with a space character as the delimiter
+    add data to bot but this one gets string inputs instead of tStrArray inputs.
+    This use strSplit() to split the string inputs (with a space character as the delimiter
     for the message keywords string input and a semicolon character for the replies string input).
-    The main work is done by the primary implementation of TTimmy.Add().
+    The main work is done by the primary implementation of timmy.add().
 
-int Add(std::string KeywordsStr, std::string RepStr);
+int add(std::string keywordsStr, std::string repStr);
 {
-    return (Add(StrSplit(KeywordsStr, ' '), StrSplit(RepStr, ';')));
+    return (add(strSplit(keywordsStr, ' '), strSplit(repStr, ';')));
 }
 
     Custom delimiters is accepted through default parameters.
 
-    Return: TTimmy.Add(MKeywords, Replies: TStrArray)
+    Return: timmy.add(mKeywords, replies: tStrArray)
 */
 
-int TTimmy::Add(std::string KeywordsStr, std::string RepStr, char KStrDeli = ' ', char MStrDeli = ';')
+int timmy::add(std::string keywordsStr, std::string repStr, char kStrDeli = ' ', char mStrDeli = ';')
 {
-    return (Add(StrSplit(KeywordsStr, KStrDeli), StrSplit(RepStr, MStrDeli)));
+    return (add(strSplit(keywordsStr, kStrDeli), strSplit(repStr, mStrDeli)));
 }
 
 /*
-    Given a set of keywords, find matches to that set in MKeywordsList,
-    remove the matches, and remove the correspondants in ReplyList as well.
-    This function simply saves offsets of the matching arrays in MKeywordsList
-    and then call TTimmy.RemoveByIndex().
+    Given a set of keywords, find matches to that set in mKeywordsList,
+    remove the matches, and remove the correspondants in replyList as well.
+    This function simply saves offsets of the matching arrays in mKeywordsList
+    and then call timmy.removeByIndex().
 
-    Return: 102 if object is not initialized or not enabled
+    Return: 102 if object is not enabled
             308 if the operation succeed
 */
-int TTimmy::Remove(TStrArray MKeywords)
+int timmy::remove(tStrArray mKeywords)
 {
-    if (!Initialized || !Enabled)
+    if (!enabled)
         return 102;
 
-    for (std::string iter : MKeywords)
+    for (std::string iter : mKeywords)
         std::transform(iter.begin(), iter.end(), iter.begin(), ::tolower);
-    int counter = -1;
-    std::vector<int> Indexes(MKeywordsList.size());
+    std::vector<int> indexes(mKeywordsList.size());
 
-    // Get offsets of keywords set that match the given MKeywords parameter
-    // and later deal with them using TTimmy.RemoveByIndex
-    
-    for (auto iter = MKeywordsList.begin(); iter != MKeywordsList.end(); ++iter)
-        if (CompareStrArrays(*iter, MKeywords))
-            Indexes[++counter] = std::distance(MKeywordsList.begin(), iter);
+    // Get offsets of keywords set that match the given mKeywords parameter
+    // and later deal with them using timmy.removeByIndex
 
-    Indexes.resize(++counter);
+    for (auto iter = mKeywordsList.begin(); iter != mKeywordsList.end(); ++iter)
+        if (compareStrArrays(*iter, mKeywords))
+            indexes.push_back(std::distance(mKeywordsList.begin(), iter));
+
+    int counter = indexes.size();
     while (counter > 0)
     {
-        TTimmy::Remove(Indexes[Indexes.size() - counter] - Indexes.size() + counter);
+        timmy::remove(indexes[indexes.size() - counter] - indexes.size() + counter);
         --counter;
     }
     return 308;
 }
 
-int TTimmy::Remove(int AIndex)
+int timmy::remove(int aIndex)
 {
-    if (!Initialized || !Enabled)
+    if (!enabled)
         return 102;
-    if ((AIndex < 0) || (AIndex >= NOfEntries))
+    if ((aIndex < 0) || (aIndex >= nOfEntries))
         return 305;
 
-    MKeywordsList.erase(std::next(MKeywordsList.begin(), AIndex));
-    ReplyList.erase(std::next(ReplyList.begin(), AIndex));
+    mKeywordsList.erase(std::next(mKeywordsList.begin(), aIndex));
+    replyList.erase(std::next(replyList.begin(), aIndex));
 
-    --NOfEntries;
-    Update;
+    --nOfEntries;
     return 300;
 }
 
 /*
-    Update metadata to match up with number of entries
+    answer the given message, using assets in the metadata
 */
-void TTimmy::Update()
+std::string timmy::answer(std::string tMessage)
 {
-    if (!Initialized)
-        return;
-
-    // Note: Not necessary in C++. Consider removing this or leaving this for compatibility
-    // MKeywordsList.resize(NOfEntries);
-    // MKeywordsList.resize(NOfEntries);
-}
-
-/*
-    Answer the given message, using assets in the metadata
-*/
-std::string TTimmy::Answer(std::string TMessage)
-{
-    if (!Initialized || !Enabled)
+    if (!enabled)
         return ("");
 
     // Define random engine
     std::default_random_engine generator;
 
     // Pre-process the message
-    std::string FlagM = lowercase(StrTrim(TMessage));
-    // Delete punctuation at the end of the message (like "?" or "!")
-    while (!isalnum(FlagM.back()))
-        FlagM.erase(prev(FlagM.end()));
+    std::string flagM = strTrim(tMessage);
+    std::transform(flagM.begin(), flagM.end(), flagM.begin(), ::tolower);
 
-    TStrArray FlagWords = StrSplit(FlagM, ' ');
+    // Delete punctuation at the end of the message (like "?" or "!")
+    while (!isalnum(flagM.back()))
+        flagM.erase(prev(flagM.end()));
+
+    tStrArray flagWords = strSplit(flagM, ' ');
     int counter;
-    for (int MetaIter = 0; MetaIter < NOfEntries; ++MetaIter)
+    for (int metaIter = 0; metaIter < nOfEntries; ++metaIter)
     {
         counter = 0;
-        for (auto MKIter : MKeywordsList[MetaIter])
-            for (auto MWIter : FlagWords)
-                counter += (MWIter == MKIter);
-        if ((counter / MKeywordsList[MetaIter].size()) * 100 >= TPercent)
+        for (auto mKIter : mKeywordsList[metaIter])
+            for (auto mWIter : flagWords)
+                counter += (mWIter == mKIter);
+        if (((double)counter / mKeywordsList[metaIter].size()) * 100 >= tPercent)
         {
-            std::uniform_real_distribution<int> distribution(0, ReplyList[MetaIter].size());
-            // int GetAnswer = distribution(generator);
-            return (ReplyList[MetaIter][distribution(generator)]);
+            auto seed = std::chrono::high_resolution_clock::now().time_since_epoch().count();
+            generator.seed(seed);
+            std::uniform_int_distribution<int> distribution(0, replyList[metaIter].size() - 1);
+            return (replyList[metaIter][distribution(generator)]);
         }
     }
-    return (NoUdstdRep);
-}
-
-// For compatibility
-std::string lowercase(std::string s)
-{
-    std::transform(s.begin(), s.end(), s.begin(), ::tolower);
-    return s;
+    return (noUdstdRep);
 }
