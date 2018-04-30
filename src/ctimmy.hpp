@@ -51,7 +51,6 @@ class timmy;
 
 class timmy
 {
-
   public:
     bool enabled = false;
     bool dupesCheck = true;
