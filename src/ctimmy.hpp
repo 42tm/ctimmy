@@ -120,7 +120,6 @@ TStrArray StrSplit(std::string s, char delimiter)
     TStrArray splited;
     s += delimiter;
     std::string FlagStr;
-    int counter = -1;
     for (char iter : s)
         if (iter != delimiter)
             FlagStr += iter;
@@ -128,15 +127,17 @@ TStrArray StrSplit(std::string s, char delimiter)
         {
             if (FlagStr.empty())
                 continue;
-            splited.resize((++counter) + 1);
-            splited[counter] = FlagStr;
+            splited.push_back(FlagStr);
             FlagStr.clear();
         }
-    if (counter == -1)
+    if (splited.empty())
     {
         splited.resize(1);
         splited[0] = s;
     }
+    // std::cout << ">";
+    // for (auto itr : splited)
+    //     std::cout << "|" << itr << std::endl;
     return (splited);
 }
 
@@ -233,7 +234,6 @@ int TTimmy::Remove(TStrArray MKeywords)
 
     for (std::string iter : MKeywords)
         std::transform(iter.begin(), iter.end(), iter.begin(), ::tolower);
-    int counter = -1;
     std::vector<int> Indexes(MKeywordsList.size());
 
     // Get offsets of keywords set that match the given MKeywords parameter
@@ -241,9 +241,9 @@ int TTimmy::Remove(TStrArray MKeywords)
     
     for (auto iter = MKeywordsList.begin(); iter != MKeywordsList.end(); ++iter)
         if (CompareStrArrays(*iter, MKeywords))
-            Indexes[++counter] = std::distance(MKeywordsList.begin(), iter);
+            Indexes.push_back(std::distance(MKeywordsList.begin(), iter));
 
-    Indexes.resize(++counter);
+    int counter = Indexes.size();
     while (counter > 0)
     {
         TTimmy::Remove(Indexes[Indexes.size() - counter] - Indexes.size() + counter);
