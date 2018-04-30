@@ -160,7 +160,6 @@ tTimmy::tTimmy()
     tPercent = 70;
     nOfEntries = 0;
     enabled = true;
-    return 100;
 }
 
 /*
