@@ -13,13 +13,18 @@ int main()
 {
     TTimmy MyBot;
     MyBot.Init();
+    std::cout << "__INIT DONE__" << std::endl;
     MyBot.NoUdstdRep = "I gave up.";
+    std::cout << "__NoUdstdRep DONE__" << std::endl;
     MyBot.Add(StrSplit("Hello", ' '), StrSplit("Greetings!|Hello to you!|Hi!", '|'));
+    std::cout << "__STRSPLIT DONE__" << std::endl;
     MyBot.Add("How are you", "I am fine!;Never better!;I'm doing great.");
     MyBot.Add("What 2 + 2", "The answer is 4", ' ', '@');
+    std::cout << "__ADD DONE__" << std::endl;
 
     std::cout << MyBot.Answer("Hello!");                       // -> "Greetings!" or "Hello to you!" or "Hi!" (randomly selected)
     std::cout << MyBot.Answer("How are you?");                 // -> "I am fine!" or "Never better!" or "I"m doing great."
     std::cout << MyBot.Answer("What is 2 + 2?");               // -> "The answer is 4"
     std::cout << MyBot.Answer("What is the meaning of life?"); // -> "I gave up"
+    std::cout << "__ANSWER DONE__" << std::endl;
 }
