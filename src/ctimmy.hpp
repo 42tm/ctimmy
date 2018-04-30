@@ -20,6 +20,7 @@
 #include <string>
 #include <algorithm>
 #include <random>
+#include <chrono>
 
 // Interface
 typedef std::vector<std::string> TStrArray;
@@ -272,6 +273,8 @@ std::string TTimmy::Answer(std::string TMessage)
         return ("");
 
     // Define random engine
+    std::default_random_engine generator;
+    std::uniform_int_distribution<int> distribution(0, ReplyList[MetaIter].size() - 1);
 
     // Pre-process the message
     std::string FlagM = StrTrim(TMessage);
@@ -291,10 +294,8 @@ std::string TTimmy::Answer(std::string TMessage)
                 counter += (MWIter == MKIter);
         if (((double)counter / MKeywordsList[MetaIter].size()) * 100 >= TPercent)
         {
-            std::random_device rd;
-            std::default_random_engine generator(rd());
-            std::uniform_int_distribution<int> distribution(0, ReplyList[MetaIter].size() - 1);
-            // int GetAnswer = distribution(generator);
+            auto seed = std::chrono::high_resolution_clock::now().time_since_epoch().count();
+            generator.seed(seed);
             return (ReplyList[MetaIter][distribution(generator)]);
         }
     }
