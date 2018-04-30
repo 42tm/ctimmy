@@ -11,15 +11,15 @@
 
 int main()
 {
-    timmy MyBot;
-    MyBot.noUdstdRep = "I gave up.";
-    MyBot.add(strSplit("Hello", ' '), strSplit("Greetings!|Hello to you!|Hi!", '|'));
-    MyBot.add("How are you", "I am fine!;Never better!;I'm doing great.");
-    MyBot.add("What 2 + 2", "The answer is 4", ' ', '@');
+    timmy myBot;
+    myBot.noUdstdRep = "I gave up.";
+    myBot.add(strSplit("Hello", ' '), strSplit("Greetings!|Hello to you!|Hi!", '|'));
+    myBot.add("How are you", "I am fine!;Never better!;I'm doing great.");
+    myBot.add("What 2 + 2", "The answer is 4", ' ', '@');
 
     std::cout
-        << MyBot.answer("Hello!") << std::endl                        // -> "Greetings!" or "Hello to you!" or "Hi!" (randomly selected)
-        << MyBot.answer("How are you?") << std::endl                  // -> "I am fine!" or "Never better!" or "I"m doing great."
-        << MyBot.answer("What is 2 + 2?") << std::endl                // -> "The answer is 4"
-        << MyBot.answer("What is the meaning of life?") << std::endl; // -> "I gave up"
+        << myBot.answer("Hello!") << std::endl                        // -> "Greetings!" or "Hello to you!" or "Hi!" (randomly selected)
+        << myBot.answer("How are you?") << std::endl                  // -> "I am fine!" or "Never better!" or "I"m doing great."
+        << myBot.answer("What is 2 + 2?") << std::endl                // -> "The answer is 4"
+        << myBot.answer("What is the meaning of life?") << std::endl; // -> "I gave up"
 }
