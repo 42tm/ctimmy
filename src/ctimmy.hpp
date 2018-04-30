@@ -44,12 +44,12 @@ typedef std::vector<std::string> tStrArray;
       tPercent           : Minimum percentage of the number of keywords over all the words of the message
                            so that the bot object can "understand" and have a reply.
                            (Sorry I don't have a good way to explain it)
-      noUdstdRep : String to assign to tTimmy.answer in case there's no possible answer to the given message
+      noUdstdRep : String to assign to timmy.answer in case there's no possible answer to the given message
 */
 
-class tTimmy;
+class timmy;
 
-class tTimmy
+class timmy
 {
 
   public:
@@ -58,7 +58,7 @@ class tTimmy
     int tPercent = 0;
     std::string noUdstdRep;
 
-    tTimmy();
+    timmy();
     int add(tStrArray mKeywords, tStrArray replies);
     // int add(std::string keywordsStr, std::string repStr);
     int add(std::string keywordsStr, std::string repStr, char kStrDeli, char mStrDeli);
@@ -153,7 +153,7 @@ bool compareStrArrays(tStrArray arrayA, tStrArray arrayB)
 /*
     construct class with some default values set.
 */
-tTimmy::tTimmy()
+timmy::timmy()
 {
     dupesCheck = true;
     noUdstdRep = "Sorry, I didn't get that";
@@ -169,7 +169,7 @@ tTimmy::tTimmy()
             202 if dupesCheck = True and found a match to mKeywords in mKeywordsList
             200 if the adding operation succeed
 */
-int tTimmy::add(tStrArray mKeywords, tStrArray replies)
+int timmy::add(tStrArray mKeywords, tStrArray replies)
 {
     if (!enabled)
         return 102;
@@ -190,7 +190,7 @@ int tTimmy::add(tStrArray mKeywords, tStrArray replies)
     add data to bot but this one gets string inputs instead of tStrArray inputs.
     This use strSplit() to split the string inputs (with a space character as the delimiter
     for the message keywords string input and a semicolon character for the replies string input).
-    The main work is done by the primary implementation of tTimmy.add().
+    The main work is done by the primary implementation of timmy.add().
 
 int add(std::string keywordsStr, std::string repStr);
 {
@@ -199,10 +199,10 @@ int add(std::string keywordsStr, std::string repStr);
 
     Custom delimiters is accepted through default parameters.
 
-    Return: tTimmy.add(mKeywords, replies: tStrArray)
+    Return: timmy.add(mKeywords, replies: tStrArray)
 */
 
-int tTimmy::add(std::string keywordsStr, std::string repStr, char kStrDeli = ' ', char mStrDeli = ';')
+int timmy::add(std::string keywordsStr, std::string repStr, char kStrDeli = ' ', char mStrDeli = ';')
 {
     return (add(strSplit(keywordsStr, kStrDeli), strSplit(repStr, mStrDeli)));
 }
@@ -211,12 +211,12 @@ int tTimmy::add(std::string keywordsStr, std::string repStr, char kStrDeli = ' '
     Given a set of keywords, find matches to that set in mKeywordsList,
     remove the matches, and remove the correspondants in replyList as well.
     This function simply saves offsets of the matching arrays in mKeywordsList
-    and then call tTimmy.removeByIndex().
+    and then call timmy.removeByIndex().
 
     Return: 102 if object is not enabled
             308 if the operation succeed
 */
-int tTimmy::remove(tStrArray mKeywords)
+int timmy::remove(tStrArray mKeywords)
 {
     if (!enabled)
         return 102;
@@ -226,7 +226,7 @@ int tTimmy::remove(tStrArray mKeywords)
     std::vector<int> indexes(mKeywordsList.size());
 
     // Get offsets of keywords set that match the given mKeywords parameter
-    // and later deal with them using tTimmy.removeByIndex
+    // and later deal with them using timmy.removeByIndex
 
     for (auto iter = mKeywordsList.begin(); iter != mKeywordsList.end(); ++iter)
         if (compareStrArrays(*iter, mKeywords))
@@ -235,13 +235,13 @@ int tTimmy::remove(tStrArray mKeywords)
     int counter = indexes.size();
     while (counter > 0)
     {
-        tTimmy::remove(indexes[indexes.size() - counter] - indexes.size() + counter);
+        timmy::remove(indexes[indexes.size() - counter] - indexes.size() + counter);
         --counter;
     }
     return 308;
 }
 
-int tTimmy::remove(int aIndex)
+int timmy::remove(int aIndex)
 {
     if (!enabled)
         return 102;
@@ -258,7 +258,7 @@ int tTimmy::remove(int aIndex)
 /*
     answer the given message, using assets in the metadata
 */
-std::string tTimmy::answer(std::string tMessage)
+std::string timmy::answer(std::string tMessage)
 {
     if (!enabled)
         return ("");
