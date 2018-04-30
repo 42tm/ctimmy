@@ -92,7 +92,7 @@ std::string StrTrim(std::string s)
     while (s.front() == ' ')
         s.erase(s.begin());
     while (s.back() == ' ')
-        s.erase(std::prev(s.end(), 1));
+        s.erase(std::prev(s.end()));
     std::string FlagStr;
     for (char iter : s)
         if (iter != ' ')
@@ -135,9 +135,6 @@ TStrArray StrSplit(std::string s, char delimiter)
         splited.resize(1);
         splited[0] = s;
     }
-    // std::cout << ">";
-    // for (auto itr : splited)
-    //     std::cout << "|" << itr << std::endl;
     return (splited);
 }
 
@@ -184,7 +181,7 @@ int TTimmy::Add(TStrArray MKeywords, TStrArray Replies)
 {
     if (!Initialized || !Enabled)
         return 102;
-    for (std::string iter : MKeywords)
+    for (std::string &iter : MKeywords)
         std::transform(iter.begin(), iter.end(), iter.begin(), ::tolower);
     if (DupesCheck && (NOfEntries > 0))
         for (TStrArray iter : MKeywordsList)
@@ -279,6 +276,7 @@ std::string TTimmy::Answer(std::string TMessage)
     // Pre-process the message
     std::string FlagM = StrTrim(TMessage);
     std::transform(FlagM.begin(), FlagM.end(), FlagM.begin(), ::tolower);
+
     // Delete punctuation at the end of the message (like "?" or "!")
     while (!isalnum(FlagM.back()))
         FlagM.erase(prev(FlagM.end()));
@@ -291,10 +289,11 @@ std::string TTimmy::Answer(std::string TMessage)
         for (auto MKIter : MKeywordsList[MetaIter])
             for (auto MWIter : FlagWords)
                 counter += (MWIter == MKIter);
-        if ((counter / ((int)MKeywordsList[MetaIter].size())) * 100 >= TPercent)
+        if (((double)counter / MKeywordsList[MetaIter].size()) * 100 >= TPercent)
         {
-            std::default_random_engine generator;
-            std::uniform_int_distribution<int> distribution(0, ReplyList[MetaIter].size());
+            std::random_device rd;
+            std::default_random_engine generator(rd());
+            std::uniform_int_distribution<int> distribution(0, ReplyList[MetaIter].size() - 1);
             // int GetAnswer = distribution(generator);
             return (ReplyList[MetaIter][distribution(generator)]);
         }
