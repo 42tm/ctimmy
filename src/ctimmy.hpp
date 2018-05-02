@@ -18,6 +18,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <sstream>
 #include <algorithm>
 #include <random>
 #include <chrono>
@@ -115,23 +116,10 @@ std::string strTrim(std::string s)
 tStrArray strSplit(std::string s, char delimiter)
 {
     tStrArray splited;
-    s += delimiter;
-    std::string flagStr;
-    for (char iter : s)
-        if (iter != delimiter)
-            flagStr += iter;
-        else
-        {
-            if (flagStr.empty())
-                continue;
-            splited.push_back(flagStr);
-            flagStr.clear();
-        }
-    if (splited.empty())
-    {
-        splited.resize(1);
-        splited[0] = s;
-    }
+    std::string token;
+    std::istringstream iss(s);
+    while (std::getline(iss, token, delimiter))
+        splited.push_back(token);
     return (splited);
 }
 
