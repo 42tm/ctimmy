@@ -54,10 +54,10 @@ class timmy;
 class timmy
 {
   public:
-    bool enabled = false;
+    bool enabled;
     bool dupesCheck = true;
-    int tPercent = 0;
-    std::string noUdstdRep;
+    int tPercent = 70;
+    std::string noUdstdRep = "Sorry, I didn't get that";
 
     timmy();
     int add(tStrArray mKeywords, tStrArray replies);
@@ -141,10 +141,6 @@ bool compareStrArrays(tStrArray arrayA, tStrArray arrayB)
 */
 timmy::timmy()
 {
-    dupesCheck = true;
-    noUdstdRep = "Sorry, I didn't get that";
-    tPercent = 70;
-    nOfEntries = 0;
     enabled = true;
 }
 
@@ -153,8 +149,8 @@ timmy::timmy()
     Data include message's keywords and possible replies to the message.
 
     Return: 102 if object is not enabled
-            200 if the adding operation succeed
             202 if dupesCheck = True and found a match to mKeywords in mKeywordsList
+            200 if the adding operation succeed
 */
 int timmy::add(tStrArray mKeywords, tStrArray replies)
 {
@@ -225,9 +221,8 @@ int timmy::remove(tStrArray mKeywords)
 /*
     Remove data from mKeywordsList at mKeywordsList[aIndex].
     Return: 102 if object is not enabled
-            300 if operation successful
             305 if the given index is invalid (out of bound)
-            
+            300 if operation successful
 */
 int timmy::remove(int aIndex)
 {
@@ -246,14 +241,14 @@ int timmy::remove(int aIndex)
 /*
     An implementation of Remove that uses string as an argument
     instead of a tStrArray. The string is delimited using the space character
-    to form a tStrArray, and then pass that TStrArray to the
+    to form a tStrArray, and then pass that tStrArray to the
     common remove function. Default value of kStrDeli is ' '
 
     Return timmy.remove(tStrArray mKeywords)
 */
 int timmy::remove(std::string keywordsStr, char kStrDeli = ' ')
 {
-    return(timmy::remove(strSplit(keywordsStr, kStrDeli)));
+    return (timmy::remove(strSplit(keywordsStr, kStrDeli)));
 }
 
 /*
