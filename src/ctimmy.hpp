@@ -1,5 +1,6 @@
 /*
-    ctimmy - C++ port of Timmy Pascal unit
+    ctimmy - C++ port of timmy - Pascal unit for creating chat bots
+    Version 1.1.0
     
     Copyright (C) 2018 42tm Team <fourtytwotm@gmail.com>
     This program is free software: you can redistribute it and/or modify
@@ -60,25 +61,23 @@ class timmy
 
     timmy();
     int add(tStrArray mKeywords, tStrArray replies);
-    // int add(std::string keywordsStr, std::string repStr);
     int add(std::string keywordsStr, std::string repStr, char kStrDeli, char mStrDeli);
     int remove(tStrArray mKeywords);
     int remove(int aIndex);
+    int remove(std::string keywordsStr, char kStrDeli);
     std::string answer(std::string tMessage);
 
   private:
     int nOfEntries = 0;
     std::vector<tStrArray> mKeywordsList;
     std::vector<tStrArray> replyList;
-
-    // Deprecated
-    // void Update();
 };
 
 std::string strTrim(std::string s);
 tStrArray strSplit(std::string s, char delimiter);
 bool compareStrArrays(tStrArray arrayA, tStrArray arrayB);
 
+// Implementation
 /*
     Given a string, process it so that the first and the last
     character are not space, and there is no multiple spaces
@@ -150,11 +149,12 @@ timmy::timmy()
 }
 
 /*
-    add data to bot object's metadata base.
+    Add data to bot object's metadata base.
     Data include message's keywords and possible replies to the message.
+
     Return: 102 if object is not enabled
-            202 if dupesCheck = True and found a match to mKeywords in mKeywordsList
             200 if the adding operation succeed
+            202 if dupesCheck = True and found a match to mKeywords in mKeywordsList
 */
 int timmy::add(tStrArray mKeywords, tStrArray replies)
 {
@@ -174,15 +174,10 @@ int timmy::add(tStrArray mKeywords, tStrArray replies)
 }
 
 /*
-    add data to bot but this one gets string inputs instead of tStrArray inputs.
+    Add data to bot but this one gets string inputs instead of tStrArray inputs.
     This use strSplit() to split the string inputs (with a space character as the delimiter
     for the message keywords string input and a semicolon character for the replies string input).
     The main work is done by the primary implementation of timmy.add().
-
-int add(std::string keywordsStr, std::string repStr);
-{
-    return (add(strSplit(keywordsStr, ' '), strSplit(repStr, ';')));
-}
 
     Custom delimiters is accepted through default parameters.
 
@@ -191,14 +186,14 @@ int add(std::string keywordsStr, std::string repStr);
 
 int timmy::add(std::string keywordsStr, std::string repStr, char kStrDeli = ' ', char mStrDeli = ';')
 {
-    return (add(strSplit(keywordsStr, kStrDeli), strSplit(repStr, mStrDeli)));
+    return (timmy::add(strSplit(keywordsStr, kStrDeli), strSplit(repStr, mStrDeli)));
 }
 
 /*
     Given a set of keywords, find matches to that set in mKeywordsList,
     remove the matches, and remove the correspondants in replyList as well.
     This function simply saves offsets of the matching arrays in mKeywordsList
-    and then call timmy.removeByIndex().
+    and then call timmy.remove(int aIndex).
 
     Return: 102 if object is not enabled
             308 if the operation succeed
@@ -213,7 +208,7 @@ int timmy::remove(tStrArray mKeywords)
     std::vector<int> indexes(mKeywordsList.size());
 
     // Get offsets of keywords set that match the given mKeywords parameter
-    // and later deal with them using timmy.removeByIndex
+    // and later deal with them using timmy.remove(int aIndex)
 
     for (auto iter = mKeywordsList.begin(); iter != mKeywordsList.end(); ++iter)
         if (compareStrArrays(*iter, mKeywords))
@@ -227,7 +222,13 @@ int timmy::remove(tStrArray mKeywords)
     }
     return 308;
 }
-
+/*
+    Remove data from mKeywordsList at mKeywordsList[aIndex].
+    Return: 102 if object is not enabled
+            300 if operation successful
+            305 if the given index is invalid (out of bound)
+            
+*/
 int timmy::remove(int aIndex)
 {
     if (!enabled)
@@ -243,7 +244,20 @@ int timmy::remove(int aIndex)
 }
 
 /*
-    answer the given message, using assets in the metadata
+    An implementation of Remove that uses string as an argument
+    instead of a tStrArray. The string is delimited using the space character
+    to form a tStrArray, and then pass that TStrArray to the
+    common remove function. Default value of kStrDeli is ' '
+
+    Return timmy.remove(tStrArray mKeywords)
+*/
+int timmy::remove(std::string keywordsStr, char kStrDeli = ' ')
+{
+    return(timmy::remove(strSplit(keywordsStr, kStrDeli)));
+}
+
+/*
+    Answer the given message, using assets in the metadata
 */
 std::string timmy::answer(std::string tMessage)
 {
