@@ -239,7 +239,7 @@ int timmy::remove(int aIndex)
 }
 
 /*
-    An implementation of Remove that uses string as an argument
+    An implementation of `remove` that uses string as an argument
     instead of a tStrArray. The string is delimited using the space character
     to form a tStrArray, and then pass that tStrArray to the
     common remove function. Default value of kStrDeli is ' '
