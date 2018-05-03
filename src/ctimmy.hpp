@@ -55,9 +55,9 @@ class timmy
 {
   public:
     bool enabled;
-    bool dupesCheck = true;
-    int tPercent = 70;
-    std::string noUdstdRep = "Sorry, I didn't get that";
+    bool dupesCheck;
+    int tPercent;
+    std::string noUdstdRep;
 
     timmy();
     int add(tStrArray mKeywords, tStrArray replies);
@@ -142,6 +142,9 @@ bool compareStrArrays(tStrArray arrayA, tStrArray arrayB)
 timmy::timmy()
 {
     enabled = true;
+    noUdstdRep = "Sorry, I didn't get that";
+    dupesCheck = true;
+    tPercent = 70;
 }
 
 /*
