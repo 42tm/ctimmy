@@ -60,6 +60,7 @@ class timmy
     std::string noUdstdRep;
 
     timmy();
+    timmy(int newPercent, std::string newRep, bool newDpCheck);
     int add(tStrArray mKeywords, tStrArray replies);
     int add(std::string keywordsStr, std::string repStr, char kStrDeli, char mStrDeli);
     int remove(tStrArray mKeywords);
@@ -141,10 +142,18 @@ bool compareStrArrays(tStrArray arrayA, tStrArray arrayB)
 */
 timmy::timmy()
 {
-    enabled = true;
-    noUdstdRep = "Sorry, I didn't get that";
-    dupesCheck = true;
-    tPercent = 70;
+    this->enabled = true;
+    this->noUdstdRep = "Sorry, I didn't get that";
+    this->dupesCheck = true;
+    this->tPercent = 70;
+}
+
+timmy::timmy(int newPercent, std::string newRep, bool newDpCheck)
+{
+    this->enabled = true;
+    this->noUdstdRep = newRep;
+    this->dupesCheck = newDpCheck;
+    this->tPercent = newPercent;
 }
 
 /*
