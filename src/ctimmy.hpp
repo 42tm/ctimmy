@@ -157,11 +157,17 @@ timmy::timmy(int newPercent, std::string newRep, bool newDpCheck)
     this->tPercent = newPercent;
 }
 
+/*
+    Enable the instance
+*/
 void timmy::enable()
 {
     this->enabled = true;
 }
 
+/*
+    Disable the instance
+*/
 void timmy::disable()
 {
     this->enabled = false;
