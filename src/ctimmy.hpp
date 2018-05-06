@@ -292,7 +292,7 @@ std::string timmy::answer(std::string tMessage)
 
     // Delete punctuation at the end of the message (like "?" or "!")
     while (!isalnum(flagM.back()))
-        flagM.erase(prev(flagM.end()));
+        flagM.erase(std::prev(flagM.end()));
 
     tStrArray flagWords = strSplit(flagM, ' ');
     int counter;
