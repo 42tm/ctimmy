@@ -1,6 +1,6 @@
 /*
     ctimmy - C++ port of timmy - Pascal unit for creating chat bots
-    Version 1.1.0
+    Version 1.2.0
     
     Copyright (C) 2018 42tm Team <fourtytwotm@gmail.com>
     This program is free software: you can redistribute it and/or modify
@@ -16,7 +16,7 @@
 */
 #pragma once
 
-#include <iostream>
+#include <cctype>
 #include <vector>
 #include <string>
 #include <sstream>
@@ -54,12 +54,14 @@ class timmy;
 class timmy
 {
   public:
-    bool enabled;
     bool dupesCheck;
     int tPercent;
     std::string noUdstdRep;
 
     timmy();
+    timmy(int newPercent, std::string newRep, bool newDpCheck);
+    void enable();
+    void disable();
     int add(tStrArray mKeywords, tStrArray replies);
     int add(std::string keywordsStr, std::string repStr, char kStrDeli, char mStrDeli);
     int remove(tStrArray mKeywords);
@@ -68,6 +70,7 @@ class timmy
     std::string answer(std::string tMessage);
 
   private:
+    bool enabled = false;
     int nOfEntries = 0;
     std::vector<tStrArray> mKeywordsList;
     std::vector<tStrArray> replyList;
@@ -83,29 +86,28 @@ bool compareStrArrays(tStrArray arrayA, tStrArray arrayB);
     character are not space, and there is no multiple spaces
     character in a row.
 */
-std::string strTrim(std::string s)
+std::string strTrim(std::string str)
 {
-    bool spaceOn;
-    while (s.front() == ' ')
-        s.erase(s.begin());
-    while (s.back() == ' ')
-        s.erase(std::prev(s.end()));
+    bool spaceOn = false;
+    while (str.front() == ' ')
+        str.erase(str.begin());
+    while (str.back() == ' ')
+        str.pop_back();
     std::string flagStr;
-    for (char iter : s)
+    for (char iter : str)
         if (iter != ' ')
         {
             flagStr += iter;
             spaceOn = false;
         }
         else
-            switch (spaceOn)
+        {
+            if (!spaceOn)
             {
-            case true:
-                continue;
-            case false:
                 flagStr += ' ';
                 spaceOn = true;
             }
+        }
     return (flagStr);
 }
 /*
@@ -141,10 +143,34 @@ bool compareStrArrays(tStrArray arrayA, tStrArray arrayB)
 */
 timmy::timmy()
 {
-    enabled = true;
-    noUdstdRep = "Sorry, I didn't get that";
-    dupesCheck = true;
-    tPercent = 70;
+    this->enabled = true;
+    this->noUdstdRep = "Sorry, I didn't get that";
+    this->dupesCheck = true;
+    this->tPercent = 70;
+}
+
+timmy::timmy(int newPercent, std::string newRep, bool newDpCheck)
+{
+    this->enabled = true;
+    this->noUdstdRep = newRep;
+    this->dupesCheck = newDpCheck;
+    this->tPercent = newPercent;
+}
+
+/*
+    Enable the instance
+*/
+void timmy::enable()
+{
+    this->enabled = true;
+}
+
+/*
+    Disable the instance
+*/
+void timmy::disable()
+{
+    this->enabled = false;
 }
 
 /*
@@ -168,7 +194,7 @@ int timmy::add(tStrArray mKeywords, tStrArray replies)
 
     mKeywordsList.push_back(mKeywords);
     replyList.push_back(replies);
-    ++nOfEntries;
+    ++(this->nOfEntries);
     return 200;
 }
 
@@ -237,7 +263,7 @@ int timmy::remove(int aIndex)
     mKeywordsList.erase(std::next(mKeywordsList.begin(), aIndex));
     replyList.erase(std::next(replyList.begin(), aIndex));
 
-    --nOfEntries;
+    --(this->nOfEntries);
     return 300;
 }
 
@@ -270,8 +296,8 @@ std::string timmy::answer(std::string tMessage)
     std::transform(flagM.begin(), flagM.end(), flagM.begin(), ::tolower);
 
     // Delete punctuation at the end of the message (like "?" or "!")
-    while (!isalnum(flagM.back()))
-        flagM.erase(prev(flagM.end()));
+    while (!std::isalnum(flagM.back()))
+        flagM.erase(std::prev(flagM.end()));
 
     tStrArray flagWords = strSplit(flagM, ' ');
     int counter;
