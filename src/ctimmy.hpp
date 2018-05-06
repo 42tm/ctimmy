@@ -16,7 +16,7 @@
 */
 #pragma once
 
-#include <iostream>
+#include <cctype>
 #include <vector>
 #include <string>
 #include <sstream>
@@ -70,7 +70,7 @@ class timmy
     std::string answer(std::string tMessage);
 
   private:
-    bool enabled;
+    bool enabled = false;
     int nOfEntries = 0;
     std::vector<tStrArray> mKeywordsList;
     std::vector<tStrArray> replyList;
@@ -86,15 +86,15 @@ bool compareStrArrays(tStrArray arrayA, tStrArray arrayB);
     character are not space, and there is no multiple spaces
     character in a row.
 */
-std::string strTrim(std::string s)
+std::string strTrim(std::string str)
 {
-    bool spaceOn;
-    while (s.front() == ' ')
-        s.erase(s.begin());
-    while (s.back() == ' ')
-        s.erase(std::prev(s.end()));
+    bool spaceOn = false;
+    while (str.front() == ' ')
+        str.erase(str.begin());
+    while (str.back() == ' ')
+        str.pop_back();
     std::string flagStr;
-    for (char iter : s)
+    for (char iter : str)
         if (iter != ' ')
         {
             flagStr += iter;
@@ -188,7 +188,7 @@ int timmy::add(tStrArray mKeywords, tStrArray replies)
 
     mKeywordsList.push_back(mKeywords);
     replyList.push_back(replies);
-    ++nOfEntries;
+    ++(this->nOfEntries);
     return 200;
 }
 
@@ -257,7 +257,7 @@ int timmy::remove(int aIndex)
     mKeywordsList.erase(std::next(mKeywordsList.begin(), aIndex));
     replyList.erase(std::next(replyList.begin(), aIndex));
 
-    --nOfEntries;
+    --(this->nOfEntries);
     return 300;
 }
 
@@ -290,7 +290,7 @@ std::string timmy::answer(std::string tMessage)
     std::transform(flagM.begin(), flagM.end(), flagM.begin(), ::tolower);
 
     // Delete punctuation at the end of the message (like "?" or "!")
-    while (!isalnum(flagM.back()))
+    while (!std::isalnum(flagM.back()))
         flagM.erase(std::prev(flagM.end()));
 
     tStrArray flagWords = strSplit(flagM, ' ');
