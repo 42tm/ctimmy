@@ -158,6 +158,16 @@ timmy::timmy(int newPercent, std::string newRep, bool newDpCheck)
     this->tPercent = newPercent;
 }
 
+void timmy::enable()
+{
+    this->enabled = true;
+}
+
+void timmy::disable()
+{
+    this->enabled = false;
+}
+
 /*
     Add data to bot object's metadata base.
     Data include message's keywords and possible replies to the message.
