@@ -101,14 +101,13 @@ std::string strTrim(std::string s)
             spaceOn = false;
         }
         else
-            switch (spaceOn)
+        {
+            if (!spaceOn)
             {
-            case true:
-                continue;
-            case false:
                 flagStr += ' ';
                 spaceOn = true;
             }
+        }
     return (flagStr);
 }
 /*
