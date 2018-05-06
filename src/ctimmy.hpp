@@ -1,6 +1,6 @@
 /*
     ctimmy - C++ port of timmy - Pascal unit for creating chat bots
-    Version 1.1.0
+    Version 1.2.0
     
     Copyright (C) 2018 42tm Team <fourtytwotm@gmail.com>
     This program is free software: you can redistribute it and/or modify
@@ -54,13 +54,14 @@ class timmy;
 class timmy
 {
   public:
-    bool enabled;
     bool dupesCheck;
     int tPercent;
     std::string noUdstdRep;
 
     timmy();
     timmy(int newPercent, std::string newRep, bool newDpCheck);
+    void enable();
+    void disable();
     int add(tStrArray mKeywords, tStrArray replies);
     int add(std::string keywordsStr, std::string repStr, char kStrDeli, char mStrDeli);
     int remove(tStrArray mKeywords);
@@ -69,6 +70,7 @@ class timmy
     std::string answer(std::string tMessage);
 
   private:
+    bool enabled;
     int nOfEntries = 0;
     std::vector<tStrArray> mKeywordsList;
     std::vector<tStrArray> replyList;
