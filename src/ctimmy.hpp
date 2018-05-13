@@ -30,10 +30,10 @@ typedef std::vector<std::string> tStrArray;
 
 /*
     Metadata refers to two arrays holding data:
-    mKeywordsList which holds keywords, and
+    msgKeywordsList which holds keywords, and
     replyList which holds replies
 
-      mKeywordsList [                                 replyList [
+      msgKeywordsList [                                 replyList [
                      [*keywords for message 1*],                [*possible answers for message 1*],
                      [*keywords for message 2*],                [*possible answers for message 2*],
                                  ...                                             ...
@@ -42,7 +42,7 @@ typedef std::vector<std::string> tStrArray;
     Variables (see also the README file):
 
       enabled            : Acts like initialized but used in fewer number of functions
-      nOfEntries         : Number of entries (elements) in mKeywordsList or replyList
+      nOfEntries         : Number of entries (elements) in msgKeywordsList or replyList
       dupesCheck         : Check for duplicate or not (might be time-saving if we don't check for duplicate)
       tPercent           : Minimum percentage of the number of keywords over all the words of the message
                            so that the bot object can "understand" and have a reply.
@@ -74,7 +74,7 @@ class timmy
   private:
     bool enabled = false;
     int nOfEntries = 0;
-    std::vector<tStrArray> mKeywordsList;
+    std::vector<tStrArray> msgKeywordsList;
     std::vector<tStrArray> replyList;
 };
 
