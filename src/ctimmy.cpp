@@ -74,6 +74,19 @@ bool compareStrArrays(tStrArray arrayA, tStrArray arrayB)
             return false;
     return true;
 }
+/*
+    Given an array of string, join them using Linker.
+    timmy::strJoin({"this", "is", "an", "example"}, "@@");
+      -> "this@@is@@an@@example"
+*/
+std::string strJoin(tStrArray strList, std::string linker)
+{
+    std::string joined;
+    for (std::string iter : strList)
+        joined += iter + linker;
+    joined.erase(std::prev(joined.end(), linker.size()), joined.end());
+    return joined;
+}
 
 /*
     Construct class with some default values set.
