@@ -7,6 +7,33 @@
             "command": "g++",
             "args": [
                 "-std=c++11",
+                "-o",
+                "test01.exe",
+                "examples\\01.cpp",
+                "src\\ctimmy.cpp"
+            ],
+            "problemMatcher": {
+                "owner": "cpp",
+                "fileLocation": [
+                    "relative",
+                    "${workspaceFolder}"
+                ],
+                "pattern": {
+                    "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "severity": 4,
+                    "message": 5
+                }
+            }
+        },
+        {
+            "label": "Build Test 01 (Debug)",
+            "group": "build",
+            "command": "g++",
+            "args": [
+                "-std=c++11",
                 "-Wall",
                 "-Wextra",
                 "-Wpedantic",
