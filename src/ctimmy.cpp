@@ -115,21 +115,21 @@ void timmy::disable()
     Data include message's keywords and possible replies to the message.
 
     Return: 102 if object is not enabled
-            202 if dupesCheck = True and found a match to mKeywords in mKeywordsList
+            202 if dupesCheck = True and found a match to msgKeywords in msgKeywordsList
             200 if the adding operation succeed
 */
-int timmy::add(tStrArray mKeywords, tStrArray replies)
+int timmy::add(tStrArray msgKeywords, tStrArray replies)
 {
     if (!enabled)
         return 102;
-    for (std::string &iter : mKeywords)
+    for (std::string &iter : msgKeywords)
         std::transform(iter.begin(), iter.end(), iter.begin(), ::tolower);
     if (dupesCheck && (nOfEntries > 0))
-        for (tStrArray iter : mKeywordsList)
-            if (compareStrArrays(iter, mKeywords))
+        for (tStrArray iter : msgKeywordsList)
+            if (compareStrArrays(iter, msgKeywords))
                 return 202;
 
-    mKeywordsList.push_back(mKeywords);
+    msgKeywordsList.push_back(msgKeywords);
     replyList.push_back(replies);
     ++(this->nOfEntries);
     return 200;
@@ -152,29 +152,29 @@ int timmy::add(std::string keywordsStr, std::string repStr, char kStrDeli, char 
 }
 
 /*
-    Given a set of keywords, find matches to that set in mKeywordsList,
+    Given a set of keywords, find matches to that set in msgKeywordsList,
     remove the matches, and remove the correspondants in replyList as well.
-    This function simply saves offsets of the matching arrays in mKeywordsList
+    This function simply saves offsets of the matching arrays in msgKeywordsList
     and then call timmy::remove(int).
 
     Return: 102 if object is not enabled
             308 if the operation succeed
 */
-int timmy::remove(tStrArray mKeywords)
+int timmy::remove(tStrArray msgKeywords)
 {
     if (!enabled)
         return 102;
 
-    for (std::string iter : mKeywords)
+    for (std::string iter : msgKeywords)
         std::transform(iter.begin(), iter.end(), iter.begin(), ::tolower);
-    std::vector<int> indexes(mKeywordsList.size());
+    std::vector<int> indexes(msgKeywordsList.size());
 
-    // Get offsets of keywords set that match the given mKeywords parameter
+    // Get offsets of keywords set that match the given msgKeywords parameter
     // and later deal with them using timmy::remove(int)
 
-    for (auto iter = mKeywordsList.begin(); iter != mKeywordsList.end(); ++iter)
-        if (compareStrArrays(*iter, mKeywords))
-            indexes.push_back(std::distance(mKeywordsList.begin(), iter));
+    for (auto iter = msgKeywordsList.begin(); iter != msgKeywordsList.end(); ++iter)
+        if (compareStrArrays(*iter, msgKeywords))
+            indexes.push_back(std::distance(msgKeywordsList.begin(), iter));
 
     int counter = indexes.size();
     while (counter > 0)
@@ -185,7 +185,7 @@ int timmy::remove(tStrArray mKeywords)
     return 308;
 }
 /*
-    Remove data from mKeywordsList at mKeywordsList[aIndex].
+    Remove data from msgKeywordsList at msgKeywordsList[aIndex].
     Return: 102 if object is not enabled
             305 if the given index is invalid (out of bound)
             300 if operation successful
@@ -197,7 +197,7 @@ int timmy::remove(int aIndex)
     if ((aIndex < 0) || (aIndex >= nOfEntries))
         return 305;
 
-    mKeywordsList.erase(std::next(mKeywordsList.begin(), aIndex));
+    msgKeywordsList.erase(std::next(msgKeywordsList.begin(), aIndex));
     replyList.erase(std::next(replyList.begin(), aIndex));
 
     --(this->nOfEntries);
@@ -241,10 +241,10 @@ std::string timmy::answer(std::string tMessage)
     for (int metaIter = 0; metaIter < nOfEntries; ++metaIter)
     {
         counter = 0;
-        for (auto mKIter : mKeywordsList[metaIter])
+        for (auto mKIter : msgKeywordsList[metaIter])
             for (auto mWIter : flagWords)
                 counter += (mWIter == mKIter);
-        if (((double)counter / mKeywordsList[metaIter].size()) * 100 >= tPercent)
+        if (((double)counter / msgKeywordsList[metaIter].size()) * 100 >= tPercent)
         {
             auto seed = std::chrono::high_resolution_clock::now().time_since_epoch().count();
             generator.seed(seed);
