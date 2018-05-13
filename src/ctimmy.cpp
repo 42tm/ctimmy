@@ -76,7 +76,7 @@ bool compareStrArrays(tStrArray arrayA, tStrArray arrayB)
 }
 
 /*
-    construct class with some default values set.
+    Construct class with some default values set.
 */
 timmy::timmy()
 {
@@ -139,11 +139,11 @@ int timmy::add(tStrArray mKeywords, tStrArray replies)
     Add data to bot but this one gets string inputs instead of tStrArray inputs.
     This use strSplit() to split the string inputs (with a space character as the delimiter
     for the message keywords string input and a semicolon character for the replies string input).
-    The main work is done by the primary implementation of timmy.add().
+    The main work is done by the primary implementation of timmy::add().
 
     Custom delimiters is accepted through default parameters.
 
-    Return: timmy.add(mKeywords, replies: tStrArray)
+    Return: timmy::add(tStrArray, tStrArray);
 */
 
 int timmy::add(std::string keywordsStr, std::string repStr, char kStrDeli, char mStrDeli)
@@ -155,7 +155,7 @@ int timmy::add(std::string keywordsStr, std::string repStr, char kStrDeli, char 
     Given a set of keywords, find matches to that set in mKeywordsList,
     remove the matches, and remove the correspondants in replyList as well.
     This function simply saves offsets of the matching arrays in mKeywordsList
-    and then call timmy.remove(int aIndex).
+    and then call timmy::remove(int).
 
     Return: 102 if object is not enabled
             308 if the operation succeed
@@ -170,7 +170,7 @@ int timmy::remove(tStrArray mKeywords)
     std::vector<int> indexes(mKeywordsList.size());
 
     // Get offsets of keywords set that match the given mKeywords parameter
-    // and later deal with them using timmy.remove(int aIndex)
+    // and later deal with them using timmy::remove(int)
 
     for (auto iter = mKeywordsList.begin(); iter != mKeywordsList.end(); ++iter)
         if (compareStrArrays(*iter, mKeywords))
@@ -210,7 +210,7 @@ int timmy::remove(int aIndex)
     to form a tStrArray, and then pass that tStrArray to the
     common remove function. Default value of kStrDeli is ' '
 
-    Return timmy.remove(tStrArray mKeywords)
+    Return timmy::remove(tStrArray);
 */
 int timmy::remove(std::string keywordsStr, char kStrDeli)
 {
