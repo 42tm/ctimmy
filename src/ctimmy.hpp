@@ -70,6 +70,7 @@ class timmy
     int remove(std::string, char = ' ');
     std::string answer(std::string);
 
+
   private:
     bool enabled = false;
     int nOfEntries = 0;
