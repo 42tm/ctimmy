@@ -67,7 +67,7 @@ class timmy
     int add(std::string, std::string, char = ' ', char = ';');
     int remove(tStrArray);
     int remove(int);
-    int remove(std::string, char);
+    int remove(std::string, char = ' ');
     std::string answer(std::string);
 
   private:

@@ -212,7 +212,7 @@ int timmy::remove(int aIndex)
 
     Return timmy.remove(tStrArray mKeywords)
 */
-int timmy::remove(std::string keywordsStr, char kStrDeli = ' ')
+int timmy::remove(std::string keywordsStr, char kStrDeli)
 {
     return (timmy::remove(strSplit(keywordsStr, kStrDeli)));
 }
