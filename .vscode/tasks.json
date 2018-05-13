@@ -8,7 +8,7 @@
             "args": [
                 "-std=c++11",
                 "-o",
-                "test01.exe",
+                "test01",
                 "examples\\01.cpp",
                 "src\\ctimmy.cpp"
             ],
@@ -39,7 +39,7 @@
                 "-Wpedantic",
                 "-O3",
                 "-o",
-                "test01.exe",
+                "test01",
                 "examples\\01.cpp",
                 "src\\ctimmy.cpp"
             ],
