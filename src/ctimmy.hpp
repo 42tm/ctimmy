@@ -28,6 +28,8 @@
 
 // Interface
 typedef std::vector<std::string> tStrArray;
+typedef std::string *pStr;
+typedef std::vector<pStr> pStrArray;
 
 /*
     Metadata refers to two arrays holding data:
@@ -66,17 +68,19 @@ class timmy
     void disable();
     int add(tStrArray, tStrArray);
     int add(std::string, std::string, char = ' ', char = ';');
+    int add(tStrArray, std::string*);
+    int add(std::string, std::string*, char = ' ');
     int remove(tStrArray);
     int remove(int);
     int remove(std::string, char = ' ');
     std::string answer(std::string);
-
 
   private:
     bool enabled = false;
     int nOfEntries = 0;
     std::vector<tStrArray> msgKeywordsList;
     std::vector<tStrArray> replyList;
+    pStrArray pReplyList;
 };
 
 std::string strTrim(std::string);
