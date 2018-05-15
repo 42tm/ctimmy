@@ -49,12 +49,7 @@ tStrArray strSplit(std::string s, char delimiter)
 */
 bool compareStrArrays(tStrArray arrayA, tStrArray arrayB)
 {
-    if (arrayA.size() != arrayB.size())
-        return false;
-    for (size_t iter = 0; iter < arrayA.size(); ++iter)
-        if (arrayA[iter] != arrayB[iter])
-            return false;
-    return true;
+    return (arrayA.size() != arrayB.size() ? false : std::equal(begin(arrayA), end(arrayA), begin(arrayB)));
 }
 /*
     Given an array of string, join them using Linker.
