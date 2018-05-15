@@ -25,27 +25,9 @@
 */
 std::string strTrim(std::string str)
 {
-    bool spaceOn = false;
-    while (str.front() == ' ')
-        str.erase(str.begin());
-    while (str.back() == ' ')
-        str.pop_back();
-    std::string flagStr;
-    for (char iter : str)
-        if (iter != ' ')
-        {
-            flagStr += iter;
-            spaceOn = false;
-        }
-        else
-        {
-            if (!spaceOn)
-            {
-                flagStr += ' ';
-                spaceOn = true;
-            }
-        }
-    return (flagStr);
+    while (str.back() == ' ') str.pop_back();
+    while (str.find("  ") != std::string::npos) str.erase(str.find("  "), 2);
+    return ((str.front() == ' ') ? str.substr(1) : str);
 }
 /*
     Given a string, split the string using the delimiter
@@ -73,6 +55,17 @@ bool compareStrArrays(tStrArray arrayA, tStrArray arrayB)
         if (arrayA[iter] != arrayB[iter])
             return false;
     return true;
+}
+/*
+    Given an array of string, join them using Linker.
+    timmy::strJoin({"this", "is", "an", "example"}, "@@");
+      -> "this@@is@@an@@example"
+*/
+std::string strJoin(tStrArray strList, std::string linker)
+{
+    for (std::string& iter : strList) iter += linker;
+    std::string joined = std::accumulate(strList.begin(), strList.end(), std::string(""));
+    return (joined.substr(0, joined.size() - linker.size()));
 }
 
 /*
