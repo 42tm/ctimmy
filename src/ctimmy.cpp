@@ -26,8 +26,8 @@
 std::string strTrim(std::string str)
 {
     while (str.back() == ' ') str.pop_back();
-    while (str.find("  ") != std::string::npos) str.erase(str.find("  "), 2);
-    return ((str.front() == ' ') ? str.substr(1) : str);
+    while (str.find("  ") != std::string::npos) str.replace(str.find("  "), " ");
+	return ((str.front() == ' ') ? str.substr(1) : str);
 }
 /*
     Given a string, split the string using the delimiter
