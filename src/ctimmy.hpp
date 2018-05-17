@@ -80,6 +80,8 @@ class timmy
     std::vector<tStrArray> msgKeywordsList;
     std::vector<tStrArray> replyList;
     pStrArray pReplyList;
+
+    int isDupe(tStrArray);
 };
 
 std::string strTrim(std::string);

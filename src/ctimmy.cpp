@@ -146,6 +146,14 @@ int timmy::add(std::string keywordsStr, std::string repStr, char kStrDeli, char 
     return (timmy::add(strSplit(keywordsStr, kStrDeli), strSplit(repStr, mStrDeli)));
 }
 
+int add(tStrArray msgKeywords, std::string *pAnswer)
+{
+}
+
+int add(std::string keywordsStr, std::string *pAnswer, char kStrDeli)
+{
+}
+
 /*
     Given a set of keywords, find matches to that set in msgKeywordsList,
     remove the matches, and remove the correspondants in replyList as well.
@@ -248,4 +256,14 @@ std::string timmy::answer(std::string tMessage)
         }
     }
     return (noUdstdRep);
+}
+/*
+    Check if given keywords clue is a duplicate of one
+    that is already presented in MsgKeywordsList.
+    Return: 1 if TTimmy.DupesCheck is false or there's zero entry
+            0 if no duplicate is found
+            2 if a duplicate is found
+*/
+int timmy::isDupe(tStrArray checkMsgKeywords)
+{
 }
