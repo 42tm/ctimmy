@@ -25,27 +25,14 @@
 */
 std::string strTrim(std::string str)
 {
-    bool spaceOn = false;
-    while (str.front() == ' ')
-        str.erase(str.begin());
     while (str.back() == ' ')
         str.pop_back();
-    std::string flagStr;
-    for (char iter : str)
-        if (iter != ' ')
-        {
-            flagStr += iter;
-            spaceOn = false;
-        }
-        else
-        {
-            if (!spaceOn)
-            {
-                flagStr += ' ';
-                spaceOn = true;
-            }
-        }
-    return (flagStr);
+    while (str.front() == ' ')
+        str.erase(str.begin());
+    auto iter = str.find("  ");
+    while ((iter = str.find("  ")) != std::string::npos)
+        str.erase(iter);
+    return str;
 }
 /*
     Given a string, split the string using the delimiter
@@ -76,9 +63,9 @@ bool compareStrArrays(tStrArray arrayA, tStrArray arrayB)
 */
 std::string strJoin(tStrArray strList, std::string linker)
 {
-    std::string joined;
-    for (std::string iter : strList)
-        joined += iter + linker;
+    for (std::string &iter : strList)
+        iter += linker;
+    std::string joined = std::accumulate(strList.begin(), strList.end(), std::string(""));
     joined.erase(std::prev(joined.end(), linker.size()), joined.end());
     return joined;
 }
