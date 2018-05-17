@@ -28,7 +28,7 @@
 
 // Interface
 typedef std::vector<std::string> tStrArray;
-typedef std::vector<std::string*> pStrArray;
+typedef std::vector<std::string *> pStrArray;
 
 /*
     Metadata refers to two arrays holding data:
@@ -67,8 +67,8 @@ class timmy
     void disable();
     int add(tStrArray, tStrArray);
     int add(std::string, std::string, char = ' ', char = ';');
-    int add(tStrArray, std::string*);
-    int add(std::string, std::string*, char = ' ');
+    int add(tStrArray, std::string *);
+    int add(std::string, std::string *, char = ' ');
     int remove(tStrArray);
     int remove(int);
     int remove(std::string, char = ' ');
