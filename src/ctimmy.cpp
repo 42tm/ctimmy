@@ -25,9 +25,14 @@
 */
 std::string strTrim(std::string str)
 {
-    while (str.back() == ' ') str.pop_back();
-    while (str.find("  ") != std::string::npos) str.replace(str.find("  "), " ");
-	return ((str.front() == ' ') ? str.substr(1) : str);
+    while (str.back() == ' ')
+        str.pop_back();
+    while (str.front() == ' ')
+        str.erase(str.begin());
+    auto iter = str.find("  ");
+    while ((iter = str.find("  ")) != std::string::npos)
+        str.erase(iter);
+    return str;
 }
 /*
     Given a string, split the string using the delimiter
@@ -49,7 +54,7 @@ tStrArray strSplit(std::string s, char delimiter)
 */
 bool compareStrArrays(tStrArray arrayA, tStrArray arrayB)
 {
-    return (arrayA.size() != arrayB.size() ? false : std::equal(begin(arrayA), end(arrayA), begin(arrayB)));
+    return arrayA == arrayB;
 }
 /*
     Given an array of string, join them using Linker.
@@ -58,9 +63,11 @@ bool compareStrArrays(tStrArray arrayA, tStrArray arrayB)
 */
 std::string strJoin(tStrArray strList, std::string linker)
 {
-    for (std::string& iter : strList) iter += linker;
+    for (std::string &iter : strList)
+        iter += linker;
     std::string joined = std::accumulate(strList.begin(), strList.end(), std::string(""));
-    return (joined.substr(0, joined.size() - linker.size()));
+    joined.erase(std::prev(joined.end(), linker.size()), joined.end());
+    return joined;
 }
 
 /*
