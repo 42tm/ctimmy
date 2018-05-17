@@ -22,6 +22,7 @@
 #include <string>
 #include <sstream>
 #include <algorithm>
+#include <numeric>
 #include <random>
 #include <chrono>
 
