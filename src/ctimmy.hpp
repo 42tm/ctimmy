@@ -28,8 +28,7 @@
 
 // Interface
 typedef std::vector<std::string> tStrArray;
-typedef std::string *pStr;
-typedef std::vector<pStr> pStrArray;
+typedef std::vector<std::string*> pStrArray;
 
 /*
     Metadata refers to two arrays holding data:
