@@ -86,5 +86,4 @@ class timmy
 
 std::string strTrim(std::string);
 tStrArray strSplit(std::string, std::string);
-bool compareStrArrays(tStrArray, tStrArray);
 std::string strJoin(tStrArray, std::string);

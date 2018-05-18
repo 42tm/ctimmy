@@ -57,14 +57,6 @@ tStrArray strSplit(std::string s, std::string delimiter)
 }
 
 /*
-    Given two arrays of strings, compare them.
-    Return true if they are the same, false otherwise.
-*/
-bool compareStrArrays(tStrArray arrayA, tStrArray arrayB)
-{
-    return arrayA == arrayB;
-}
-/*
     Given an array of string, join them using Linker.
     timmy::strJoin({"this", "is", "an", "example"}, "@@");
       -> "this@@is@@an@@example"
@@ -129,7 +121,7 @@ int timmy::add(tStrArray msgKeywords, tStrArray replies)
         std::transform(iter.begin(), iter.end(), iter.begin(), ::tolower);
     if (dupesCheck && (nOfEntries > 0))
         for (tStrArray iter : msgKeywordsList)
-            if (compareStrArrays(iter, msgKeywords))
+            if (iter == msgKeywords)
                 return 202;
 
     msgKeywordsList.push_back(msgKeywords);
