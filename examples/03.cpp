@@ -12,13 +12,17 @@
 
 int main()
 {
+    timmy myBot(50, "Question not understood :/", false);
+
     std::string myString = "asdf";
     std::string *pMyStr = &myString;
 
-    timmy myBot(50, "Question not understood :/", false);
     myBot.add("what my string", pMyStr);
     std::cout << myBot.answer("what is my string?") << std::endl;
+    //  -> asdf
 
     myString = "Something else";
     std::cout << myBot.answer("what is my string?") << std::endl;
+    //  -> Something else
+
 }

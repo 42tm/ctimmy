@@ -4,17 +4,21 @@
     Version 1.2.0
     
     Copyright (C) 2018 42tm Team <fourtytwotm@gmail.com>
+
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
+
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Lesser General Public License for more details.
+    
     You should have received a copy of the GNU Lesser General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+// Interface
 #include "ctimmy.hpp"
 
 // Implementation
@@ -34,16 +38,23 @@ std::string strTrim(std::string str)
         str.erase(iter);
     return str;
 }
+
 /*
     Given a string, split the string using the delimiter
-    and return an array containing the seperated strings.
+    and return an array containing the separated strings.
+    If no delimiter delimiter is found in string s,
+    a tStrArray of only one value is returned, and that
+    only one value is the original string s.
 */
 tStrArray strSplit(std::string s, std::string delimiter)
 {
     tStrArray splited;
     std::string token;
     if (s.size() < delimiter.size())
+    {
+        splited.push_back(s);
         return (splited);
+    }
     size_t pos, last = 0;
     s += delimiter;
     while ((pos = s.find(delimiter, last)) != std::string::npos)
@@ -71,6 +82,9 @@ std::string strJoin(tStrArray strList, std::string linker)
 }
 
 /*
+    Class implementation
+*/
+/*
     Construct class with some default values set.
 */
 timmy::timmy()
@@ -81,6 +95,9 @@ timmy::timmy()
     this->tPercent = 70;
 }
 
+/*
+    Construct class with custom values set.
+*/
 timmy::timmy(int newPercent, std::string newRep, bool newDpCheck)
 {
     this->enabled = true;
@@ -106,8 +123,28 @@ void timmy::disable()
 }
 
 /*
+    Check if given keywords clue is a duplicate of one
+    that is already presented in MsgKeywordsList.
+    Return true if duplication check is enabled and
+    a duplicate is found, false otherwise.
+*/
+bool timmy::isDupe(tStrArray checkMsgKeywords)
+{
+    if (!dupesCheck || nOfEntries == 0)
+        return false;
+
+    for (tStrArray &iter : msgKeywordsList)
+    {
+        if (iter == checkMsgKeywords)
+            return true;
+    }
+    return false;
+}
+
+/*
     Add data to bot object's metadata base.
     Data include message's keywords and possible replies to the message.
+    *** PRIMARY ADD FUNCTION ***
 
     Return: 102 if object is not enabled
             202 if dupesCheck = True and found a match to msgKeywords in msgKeywordsList
@@ -131,30 +168,25 @@ int timmy::add(tStrArray msgKeywords, tStrArray replies)
 }
 
 /*
-    Add data to bot but this one gets string inputs instead of tStrArray inputs.
-    This use strSplit() to split the string inputs (with a space character as the delimiter
-    for the message keywords string input and a semicolon character for the replies string input).
-    The main work is done by the primary implementation of timmy::add().
-
-    Custom delimiters is accepted through default parameters.
+    Add data, but this one takes strings instead of tStrArray.
+    The strings are delimited using delimiters to create tStrArray,
+    and these tStrArray are then passed to the primary timmy::add().
 
     Return: timmy::add(tStrArray, tStrArray);
 */
-
 int timmy::add(std::string keywordsStr, std::string repStr, std::string kStrDeli, std::string mStrDeli)
 {
-    return (timmy::add(strSplit(keywordsStr, kStrDeli), strSplit(repStr, mStrDeli)));
+    return (this->add(strSplit(keywordsStr, kStrDeli), strSplit(repStr, mStrDeli)));
 }
 
 /*
-    Add data, takes TStrArray for keywords clue and a pointer which
+    Add data, takes tStrArray for keywords clue and a pointer which
     points to the possible answer for the messages that contain the keywords.
 
     Return: 102 if the bot is not enabled
             202 if dupes check is enabled and a duplication is found
             203 if the operation is successful
 */
-
 int timmy::add(tStrArray msgKeywords, std::string *pAnswer)
 {
     if (!this->enabled)
@@ -163,18 +195,19 @@ int timmy::add(tStrArray msgKeywords, std::string *pAnswer)
         return 202;
 
     ++(this->nOfEntries);
-    this->msgKeywordsList.push_back(msgKeywords);
+    msgKeywordsList.push_back(msgKeywords);
     pReplyList.push_back(pAnswer);
 
     return 203;
 }
+
 /*
     Functions like the above one but takes string instead of tStrArray.
-    The string is delimited using a delimiter to create a TStrArray.
+    The string is delimited using a delimiter to create a tStrArray,
+    and the rest is for timmy::add(tStrArray, pStr)
 
     Return: timmy::add(tStrArray, pStr)
 */
-
 int timmy::add(std::string keywordsStr, std::string *pAnswer, std::string kStrDeli)
 {
     return (this->add(strSplit(keywordsStr, kStrDeli), pAnswer));
@@ -184,7 +217,7 @@ int timmy::add(std::string keywordsStr, std::string *pAnswer, std::string kStrDe
     Given a set of keywords, find matches to that set in msgKeywordsList,
     remove the matches, and remove the correspondants in replyList as well.
     This function simply saves offsets of the matching arrays in msgKeywordsList
-    and then call timmy::remove(int).
+    and then call timmy::remove(size_t).
 
     Return: 102 if object is not enabled
             308 if the operation succeed
@@ -208,13 +241,27 @@ int timmy::remove(tStrArray msgKeywords)
     int counter = indexes.size();
     while (counter > 0)
     {
-        timmy::remove(indexes[indexes.size() - counter] - indexes.size() + counter);
+        this->remove(indexes[indexes.size() - counter] - indexes.size() + counter);
         --counter;
     }
     return 308;
 }
+
 /*
-    Remove data from msgKeywordsList at msgKeywordsList[aIndex].
+    The same as the above implementation of `timmy::remove()`, but allows
+    use of custom string delimiter.
+
+    Return timmy::remove(tStrArray);
+*/
+int timmy::remove(std::string keywordsStr, std::string kStrDeli)
+{
+    return (this->remove(strSplit(keywordsStr, kStrDeli)));
+}
+
+/*
+    Remove data from msgKeywordsList at msgKeywordsList[aIndex]
+    and answer(s) corresponding to the keywords at that offset.
+
     Return: 102 if object is not enabled
             305 if the given index is invalid (out of bound)
             300 if operation successful
@@ -227,23 +274,17 @@ int timmy::remove(size_t aIndex)
         return 305;
 
     msgKeywordsList.erase(std::next(msgKeywordsList.begin(), aIndex));
-    replyList.erase(std::next(replyList.begin(), aIndex));
+    if (aIndex < replyList.size())
+    {
+        replyList.erase(std::next(replyList.begin(), aIndex));
+    }
+    else
+    {
+        pReplyList.erase(std::next(pReplyList.begin(), aIndex - replyList.size()));
+    }
 
     --(this->nOfEntries);
     return 300;
-}
-
-/*
-    An implementation of `remove` that uses string as an argument
-    instead of a tStrArray. The string is delimited using the space character
-    to form a tStrArray, and then pass that tStrArray to the
-    common remove function. Default value of kStrDeli is ' '
-
-    Return timmy::remove(tStrArray);
-*/
-int timmy::remove(std::string keywordsStr, std::string kStrDeli)
-{
-    return (timmy::remove(strSplit(keywordsStr, kStrDeli)));
 }
 
 /*
@@ -287,7 +328,7 @@ std::string timmy::answer(std::string tMessage)
     // Case: Not understood
     if (!isMatch)
         return (noUdstdRep);
-        
+
     // Case: Understood
     if (maxMatch < replyList.size())
     {
@@ -299,23 +340,4 @@ std::string timmy::answer(std::string tMessage)
     else
         return (*pReplyList[maxMatch - replyList.size()]);
     return (noUdstdRep);
-}
-/*
-    Check if given keywords clue is a duplicate of one
-    that is already presented in MsgKeywordsList.
-    Return: 1 if TTimmy.DupesCheck is false or there's zero entry
-            0 if no duplicate is found
-            2 if a duplicate is found
-*/
-bool timmy::isDupe(tStrArray checkMsgKeywords)
-{
-    if (!dupesCheck || nOfEntries == 0)
-        return false;
-
-    for (tStrArray &iter : this->msgKeywordsList)
-    {
-        if (iter == checkMsgKeywords)
-            return true;
-    }
-    return false;
 }
