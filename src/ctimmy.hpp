@@ -24,7 +24,7 @@
 #include <numeric>
 #include <random>
 #include <chrono>
-#include <cmath>
+#include <cstdlib>
 
 // Interface
 typedef std::vector<std::string> tStrArray;

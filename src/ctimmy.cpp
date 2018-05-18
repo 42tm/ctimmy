@@ -267,10 +267,12 @@ std::string timmy::answer(std::string tMessage)
 
     tStrArray flagWords = strSplit(flagM, " ");
     size_t counter, maxMatch;
+    bool isMatch;
     for (size_t metaIter = 0; metaIter < nOfEntries; ++metaIter)
     {
         counter = 0;
-        
+        isMatch = false;
+
         // Iterate over each keyword in each array in msgKeywordsList
         for (auto mKIter : msgKeywordsList[metaIter])
             for (auto mWIter : flagWords)
@@ -278,9 +280,16 @@ std::string timmy::answer(std::string tMessage)
 
         // Compare to tPercent
         if ((1.0 * counter / msgKeywordsList[metaIter].size()) * 100 >= tPercent)
+        {
             maxMatch = metaIter;
+            isMatch = true;
+        }
 
         // Case: Not understood
+        if (!isMatch)
+            return (noUdstdRep);
+
+        // Case: Understood
         if (maxMatch < replyList.size())
         {
             auto seed = std::chrono::high_resolution_clock::now().time_since_epoch().count();
