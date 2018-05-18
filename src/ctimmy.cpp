@@ -41,14 +41,17 @@ std::string strTrim(std::string str)
 tStrArray strSplit(std::string s, std::string delimiter)
 {
     tStrArray splited;
+    std::string token;
     if (s.size() < delimiter.size())
         return (splited);
-    size_t pos;
+    size_t pos, last = 0;
     s += delimiter;
-    while ((pos = s.find(delimiter)) != std::string::npos)
+    while ((pos = s.find(delimiter, last)) != std::string::npos)
     {
-        splited.push_back(s.substr(0, pos));
-        s.erase(0, pos + delimiter.size());
+        token = s.substr(last, pos - last);
+        if (!token.empty())
+            splited.push_back(token);
+        last = pos + 1;
     }
     return (splited);
 }
