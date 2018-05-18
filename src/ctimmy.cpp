@@ -202,7 +202,7 @@ int timmy::remove(tStrArray msgKeywords)
     // and later deal with them using timmy::remove(int)
 
     for (auto iter = msgKeywordsList.begin(); iter != msgKeywordsList.end(); ++iter)
-        if (*iter == msgKeywords))
+        if (*iter == msgKeywords)
             indexes.push_back(std::distance(msgKeywordsList.begin(), iter));
 
     int counter = indexes.size();
