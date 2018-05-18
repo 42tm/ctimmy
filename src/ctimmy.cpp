@@ -169,15 +169,15 @@ int timmy::add(tStrArray msgKeywords, std::string *pAnswer)
     return 203;
 }
 /*
-    Functions like the above one but takes string instead of TStrArray.
-    The string is delimited using a delimiter to create a TStrArray,
-    and the rest is for TTimmy.Add(TStrArray, PStr)
+    Functions like the above one but takes string instead of tStrArray.
+    The string is delimited using a delimiter to create a TStrArray.
 
-    Return: TTimmy.Add(TStrArray, PStr)
+    Return: timmy::add(tStrArray, pStr)
 */
 
 int timmy::add(std::string keywordsStr, std::string *pAnswer, char kStrDeli)
 {
+    return (this->add(strSplit(keywordsStr, kStrDeli), pAnswer));
 }
 
 /*
