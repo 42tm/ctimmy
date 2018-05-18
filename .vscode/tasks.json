@@ -7,6 +7,10 @@
             "command": "g++",
             "args": [
                 "-std=c++11",
+                "-Wall",
+                "-Wextra",
+                "-Wpedantic",
+                "-O3",
                 "-o",
                 "test01",
                 "examples\\01.cpp",
@@ -29,7 +33,7 @@
             }
         },
         {
-            "label": "Build Test 01 (Debug)",
+            "label": "Build Test 03",
             "group": "build",
             "command": "g++",
             "args": [
@@ -39,8 +43,8 @@
                 "-Wpedantic",
                 "-O3",
                 "-o",
-                "test01",
-                "examples\\01.cpp",
+                "test03",
+                "examples\\03.cpp",
                 "src\\ctimmy.cpp"
             ],
             "problemMatcher": {

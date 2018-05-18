@@ -2,6 +2,7 @@
     Timmy example 1: The basics
     Original author: Nguyen Hoang Duong (@NOVAglow).
     C++ Port by Nguyen Tuan Dung (@dungwinux)
+    
     This example is similar to the one demonstrated in the README file.
     This example demonstrates all 2 different ways to add data to a TTimmy
     object's metadata by using the overloaded function add.

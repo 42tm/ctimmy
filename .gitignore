@@ -1,8 +1,7 @@
-.vscode/*
-*
+/*
 !.gitignore
-!src
-!examples
+!/src
+!/examples
 !*.md
 !COPYING
 !COPYING.LESSER
