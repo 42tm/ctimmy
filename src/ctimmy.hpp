@@ -81,7 +81,7 @@ class timmy
     std::vector<tStrArray> replyList;
     pStrArray pReplyList;
 
-    int isDupe(tStrArray);
+    bool isDupe(tStrArray);
 };
 
 std::string strTrim(std::string);

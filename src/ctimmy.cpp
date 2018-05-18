@@ -264,6 +264,15 @@ std::string timmy::answer(std::string tMessage)
             0 if no duplicate is found
             2 if a duplicate is found
 */
-int timmy::isDupe(tStrArray checkMsgKeywords)
+bool timmy::isDupe(tStrArray checkMsgKeywords)
 {
+    if (!dupesCheck || nOfEntries == 0)
+        return false;
+    
+    for (tStrArray &iter: this->msgKeywordsList)
+    {
+        if (iter == checkMsgKeywords)
+            return true;
+    }
+    return false;
 }
