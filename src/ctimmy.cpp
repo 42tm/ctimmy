@@ -226,7 +226,7 @@ int timmy::remove(size_t aIndex)
 {
     if (!enabled)
         return 102;
-    if ((aIndex < 0) || (aIndex >= nOfEntries))
+    if (aIndex >= nOfEntries)
         return 305;
 
     msgKeywordsList.erase(std::next(msgKeywordsList.begin(), aIndex));
@@ -270,7 +270,7 @@ std::string timmy::answer(std::string tMessage)
 
     tStrArray flagWords = strSplit(flagM, " ");
     int counter;
-    for (int metaIter = 0; metaIter < nOfEntries; ++metaIter)
+    for (size_t metaIter = 0; metaIter < nOfEntries; ++metaIter)
     {
         counter = 0;
         for (auto mKIter : msgKeywordsList[metaIter])
