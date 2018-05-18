@@ -13,9 +13,9 @@ int main()
 {
     timmy myBot;
     myBot.noUdstdRep = "I gave up.";
-    myBot.add(strSplit("Hello", ' '), strSplit("Greetings!|Hello to you!|Hi!", '|'));
+    myBot.add(strSplit("Hello", " "), strSplit("Greetings!|Hello to you!|Hi!", "|"));
     myBot.add("How are you", "I am fine!;Never better!;I'm doing great.");
-    myBot.add("What 2 + 2", "The answer is 4", ' ', '@');
+    myBot.add("What 2 + 2", "The answer is 4", " ", "@");
 
     std::cout
         << myBot.answer("Hello!") << std::endl                        // -> "Greetings!" or "Hello to you!" or "Hi!" (randomly selected)

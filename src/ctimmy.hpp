@@ -66,12 +66,12 @@ class timmy
     void enable();
     void disable();
     int add(tStrArray, tStrArray);
-    int add(std::string, std::string, char = ' ', char = ';');
+    int add(std::string, std::string, std::string = " ", std::string = ";");
     int add(tStrArray, std::string *);
-    int add(std::string, std::string *, char = ' ');
+    int add(std::string, std::string *, std::string = " ");
     int remove(tStrArray);
-    int remove(int);
-    int remove(std::string, char = ' ');
+    int remove(size_t);
+    int remove(std::string, std::string = " ");
     std::string answer(std::string);
 
   private:
@@ -85,6 +85,6 @@ class timmy
 };
 
 std::string strTrim(std::string);
-tStrArray strSplit(std::string, char);
+tStrArray strSplit(std::string, std::string);
 bool compareStrArrays(tStrArray, tStrArray);
 std::string strJoin(tStrArray, std::string);

@@ -38,13 +38,16 @@ std::string strTrim(std::string str)
     Given a string, split the string using the delimiter
     and return an array containing the seperated strings.
 */
-tStrArray strSplit(std::string s, char delimiter)
+tStrArray strSplit(std::string s, std::string delimiter)
 {
     tStrArray splited;
     std::string token;
     std::istringstream iss(s);
-    while (std::getline(iss, token, delimiter))
-        splited.push_back(token);
+    size_t pos = -1;
+    while ((pos = s.find(delimiter, pos + 1)) != std::string::npos)
+    {
+        splited.push_back(s.substr(0, pos));
+    }
     return (splited);
 }
 
@@ -141,7 +144,7 @@ int timmy::add(tStrArray msgKeywords, tStrArray replies)
     Return: timmy::add(tStrArray, tStrArray);
 */
 
-int timmy::add(std::string keywordsStr, std::string repStr, char kStrDeli, char mStrDeli)
+int timmy::add(std::string keywordsStr, std::string repStr, std::string kStrDeli, std::string mStrDeli)
 {
     return (timmy::add(strSplit(keywordsStr, kStrDeli), strSplit(repStr, mStrDeli)));
 }
@@ -175,7 +178,7 @@ int timmy::add(tStrArray msgKeywords, std::string *pAnswer)
     Return: timmy::add(tStrArray, pStr)
 */
 
-int timmy::add(std::string keywordsStr, std::string *pAnswer, char kStrDeli)
+int timmy::add(std::string keywordsStr, std::string *pAnswer, std::string kStrDeli)
 {
     return (this->add(strSplit(keywordsStr, kStrDeli), pAnswer));
 }
@@ -219,7 +222,7 @@ int timmy::remove(tStrArray msgKeywords)
             305 if the given index is invalid (out of bound)
             300 if operation successful
 */
-int timmy::remove(int aIndex)
+int timmy::remove(size_t aIndex)
 {
     if (!enabled)
         return 102;
@@ -241,7 +244,7 @@ int timmy::remove(int aIndex)
 
     Return timmy::remove(tStrArray);
 */
-int timmy::remove(std::string keywordsStr, char kStrDeli)
+int timmy::remove(std::string keywordsStr, std::string kStrDeli)
 {
     return (timmy::remove(strSplit(keywordsStr, kStrDeli)));
 }
@@ -265,7 +268,7 @@ std::string timmy::answer(std::string tMessage)
     while (!std::isalnum(flagM.back()))
         flagM.erase(std::prev(flagM.end()));
 
-    tStrArray flagWords = strSplit(flagM, ' ');
+    tStrArray flagWords = strSplit(flagM, " ");
     int counter;
     for (int metaIter = 0; metaIter < nOfEntries; ++metaIter)
     {
@@ -294,8 +297,8 @@ bool timmy::isDupe(tStrArray checkMsgKeywords)
 {
     if (!dupesCheck || nOfEntries == 0)
         return false;
-    
-    for (tStrArray &iter: this->msgKeywordsList)
+
+    for (tStrArray &iter : this->msgKeywordsList)
     {
         if (iter == checkMsgKeywords)
             return true;
