@@ -266,7 +266,7 @@ std::string timmy::answer(std::string tMessage)
         flagM.pop_back();
 
     tStrArray flagWords = strSplit(flagM, " ");
-    int counter, maxMatch;
+    size_t counter, maxMatch;
     for (size_t metaIter = 0; metaIter < nOfEntries; ++metaIter)
     {
         counter = 0;
