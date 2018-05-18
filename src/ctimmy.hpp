@@ -76,7 +76,7 @@ class timmy
 
   private:
     bool enabled = false;
-    int nOfEntries = 0;
+    size_t nOfEntries = 0;
     std::vector<tStrArray> msgKeywordsList;
     std::vector<tStrArray> replyList;
     pStrArray pReplyList;

@@ -146,11 +146,37 @@ int timmy::add(std::string keywordsStr, std::string repStr, char kStrDeli, char 
     return (timmy::add(strSplit(keywordsStr, kStrDeli), strSplit(repStr, mStrDeli)));
 }
 
-int add(tStrArray msgKeywords, std::string *pAnswer)
-{
-}
+/*
+    Add data, takes TStrArray for keywords clue and a pointer which
+    points to the possible answer for the messages that contain the keywords.
 
-int add(std::string keywordsStr, std::string *pAnswer, char kStrDeli)
+    Return: 102 if the bot is not enabled
+            202 if dupes check is enabled and a duplication is found
+            203 if the operation is successful
+*/
+
+int timmy::add(tStrArray msgKeywords, std::string *pAnswer)
+{
+    if (!this->enabled)
+        return 102;
+    if (isDupe(msgKeywords))
+        return 202;
+
+    ++(this->nOfEntries);
+    this->msgKeywordsList.push_back(msgKeywords);
+    pReplyList.push_back(pAnswer);
+
+    return 203;
+}
+/*
+    Functions like the above one but takes string instead of TStrArray.
+    The string is delimited using a delimiter to create a TStrArray,
+    and the rest is for TTimmy.Add(TStrArray, PStr)
+
+    Return: TTimmy.Add(TStrArray, PStr)
+*/
+
+int timmy::add(std::string keywordsStr, std::string *pAnswer, char kStrDeli)
 {
 }
 
