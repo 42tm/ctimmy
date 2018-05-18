@@ -263,23 +263,33 @@ std::string timmy::answer(std::string tMessage)
 
     // Delete punctuation at the end of the message (like "?" or "!")
     while (!std::isalnum(flagM.back()))
-        flagM.erase(std::prev(flagM.end()));
+        flagM.pop_back();
 
     tStrArray flagWords = strSplit(flagM, " ");
-    int counter;
+    int counter, maxMatch;
     for (size_t metaIter = 0; metaIter < nOfEntries; ++metaIter)
     {
         counter = 0;
+        
+        // Iterate over each keyword in each array in msgKeywordsList
         for (auto mKIter : msgKeywordsList[metaIter])
             for (auto mWIter : flagWords)
                 counter += (mWIter == mKIter);
-        if (((double)counter / msgKeywordsList[metaIter].size()) * 100 >= tPercent)
+
+        // Compare to tPercent
+        if ((1.0 * counter / msgKeywordsList[metaIter].size()) * 100 >= tPercent)
+            maxMatch = metaIter;
+
+        // Case: Not understood
+        if (maxMatch < replyList.size())
         {
             auto seed = std::chrono::high_resolution_clock::now().time_since_epoch().count();
             generator.seed(seed);
-            std::uniform_int_distribution<int> distribution(0, replyList[metaIter].size() - 1);
+            std::uniform_int_distribution<int> distribution(0, replyList[maxMatch].size() - 1);
             return (replyList[metaIter][distribution(generator)]);
         }
+        else
+            return (*pReplyList[abs(nOfEntries - pReplyList.size() - maxMatch)]);
     }
     return (noUdstdRep);
 }

@@ -20,11 +20,11 @@
 #include <cctype>
 #include <vector>
 #include <string>
-#include <sstream>
 #include <algorithm>
 #include <numeric>
 #include <random>
 #include <chrono>
+#include <cmath>
 
 // Interface
 typedef std::vector<std::string> tStrArray;
