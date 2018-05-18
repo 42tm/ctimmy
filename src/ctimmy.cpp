@@ -298,7 +298,7 @@ std::string timmy::answer(std::string tMessage)
             return (replyList[metaIter][distribution(generator)]);
         }
         else
-            return (*pReplyList[abs(nOfEntries - pReplyList.size() - maxMatch)]);
+            return (*pReplyList[nOfEntries - pReplyList.size() - maxMatch]);
     }
     return (noUdstdRep);
 }
