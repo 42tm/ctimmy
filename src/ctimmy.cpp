@@ -266,12 +266,11 @@ std::string timmy::answer(std::string tMessage)
         flagM.pop_back();
 
     tStrArray flagWords = strSplit(flagM, " ");
-    size_t counter, maxMatch;
-    bool isMatch;
+    size_t counter, maxMatch = 0;
+    bool isMatch = false;
     for (size_t metaIter = 0; metaIter < nOfEntries; ++metaIter)
     {
         counter = 0;
-        isMatch = false;
 
         // Iterate over each keyword in each array in msgKeywordsList
         for (auto mKIter : msgKeywordsList[metaIter])
@@ -284,22 +283,21 @@ std::string timmy::answer(std::string tMessage)
             maxMatch = metaIter;
             isMatch = true;
         }
-
-        // Case: Not understood
-        if (!isMatch)
-            return (noUdstdRep);
-
-        // Case: Understood
-        if (maxMatch < replyList.size())
-        {
-            auto seed = std::chrono::high_resolution_clock::now().time_since_epoch().count();
-            generator.seed(seed);
-            std::uniform_int_distribution<int> distribution(0, replyList[maxMatch].size() - 1);
-            return (replyList[metaIter][distribution(generator)]);
-        }
-        else
-            return (*pReplyList[maxMatch - replyList.size()]);
     }
+    // Case: Not understood
+    if (!isMatch)
+        return (noUdstdRep);
+        
+    // Case: Understood
+    if (maxMatch < replyList.size())
+    {
+        auto seed = std::chrono::high_resolution_clock::now().time_since_epoch().count();
+        generator.seed(seed);
+        std::uniform_int_distribution<int> distribution(0, replyList[maxMatch].size() - 1);
+        return (replyList[maxMatch][distribution(generator)]);
+    }
+    else
+        return (*pReplyList[maxMatch - replyList.size()]);
     return (noUdstdRep);
 }
 /*
