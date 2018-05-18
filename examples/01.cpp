@@ -12,8 +12,7 @@
 
 int main()
 {
-    timmy myBot;
-    myBot.noUdstdRep = "I gave up.";
+    timmy myBot(70, "I gave up", false);
     myBot.add(strSplit("Hello", " "), strSplit("Greetings!|Hello to you!|Hi!", "|"));
     myBot.add("How are you", "I am fine!;Never better!;I'm doing great.");
     myBot.add("What 2 + 2", "The answer is 4", " ", "@");
