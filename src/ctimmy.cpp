@@ -199,7 +199,7 @@ int timmy::remove(tStrArray msgKeywords)
     std::vector<int> indexes(msgKeywordsList.size());
 
     // Get offsets of keywords set that match the given msgKeywords parameter
-    // and later deal with them using timmy::remove(int)
+    // and later deal with them using timmy::remove(size_t)
 
     for (auto iter = msgKeywordsList.begin(); iter != msgKeywordsList.end(); ++iter)
         if (*iter == msgKeywords)
