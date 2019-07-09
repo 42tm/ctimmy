@@ -1,6 +1,6 @@
 /*
     Timmy example 3: Using pointers with Timmy
-    Original author: Nguyen Hoang Duong (@NOVAglow).
+    Original author: Nguyen Hoang Duong (@you-create).
     C++ Port by Nguyen Tuan Dung (@dungwinux)
 
     This example demonstrates the use of pointers in Timmy,
